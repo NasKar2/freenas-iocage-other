@@ -2,7 +2,7 @@
 
 #### https://github.com/NasKar2/freenas-iocage-other.git
 
-Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Unifi, Emby, Wordpress, Jackett
+Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Unifi, Emby, Wordpress, Jackett and Backup/Restore Wordpress
 
 Unifi etc. will be placed in a jail with separate data directory (/mnt/v1/apps/...) to allow for easy reinstallation/backup.
 
@@ -30,7 +30,7 @@ UNIFI_DATA="unifi"
 MEDIA_LOCATION="media"
 ```
 
-Likewise create config files for the other apps - emby-config, emby-config, jackett-config and replace JAIL_IP, JAIL_NAME, and JAIL_DATA with the name of the application. For example see below for emby.
+Likewise create config files for the other apps - emby-config, jackett-config and replace JAIL_IP, JAIL_NAME, and JAIL_DATA with the name of the application. For example see below for emby.
 
 ```
 JAIL_IP="192.168.5.238"
