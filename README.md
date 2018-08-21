@@ -2,7 +2,7 @@
 
 #### https://github.com/NasKar2/freenas-iocage-other.git
 
-Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Unifi, Emby, Wordpress, Jackett and Backup/Restore Wordpress
+Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Unifi, Emby, Wordpress, Jackett, UrBackup and Backup/Restore Wordpress
 
 Unifi etc. will be placed in a jail with separate data directory (/mnt/v1/apps/...) to allow for easy reinstallation/backup.
 
@@ -30,7 +30,7 @@ UNIFI_DATA="unifi"
 MEDIA_LOCATION="media"
 ```
 
-Likewise create config files for the other apps - emby-config, jackett-config and replace JAIL_IP, JAIL_NAME, and JAIL_DATA with the name of the application. For example see below for emby.
+Likewise create config files for the other apps - emby-config, jackett-config urbackup-config and replace JAIL_IP, JAIL_NAME, and JAIL_DATA with the name of the application. For example see below for emby.
 
 ```
 JAIL_IP="192.168.5.238"
@@ -75,6 +75,20 @@ DATABASE_NAME="wordpress"
 DB_BACKUP_NAME="wordpress.sql"
 DB_PASSWORD="yourdatabasepassword"
 ```
+
+Create urbackup-config.
+
+```
+JAIL_IP="192.168.5.243"
+DEFAULT_GW_IP="192.168.5.1"
+INTERFACE="em0"
+VNET="off"
+POOL_PATH="/mnt/v1"
+APPS_PATH="apps"
+JAIL_NAME="urbackup"
+URBACKUP_DATA="urbackup"
+```
+
 ## Install Unifi in fresh Jail
 
 Create an iocage jail to install Unifi.
@@ -88,3 +102,4 @@ Other apps can be installed with ./AppNameinstall.sh
 
 ## After install
 
+After install of UrBackup go to Settings/General/Server/Backup storage path: /config
