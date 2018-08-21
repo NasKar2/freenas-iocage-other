@@ -130,7 +130,7 @@ echo "Wordpress database backup ${DB_BACKUP_NAME} complete"
 ls -l /${POOL_PATH}/${BACKUP_PATH}/
   cd ${POOL_PATH}/${APPS_PATH}/${WP_SOURCE}
   echo "cd ${POOL_PATH}/${APPS_PATH}/${WP_SOURCE}"
-  tar -zcvf ${POOL_PATH}/${BACKUP_PATH}/${BACKUP_NAME} ./
+  tar -zcf ${POOL_PATH}/${BACKUP_PATH}/${BACKUP_NAME} ./
   echo "tar-zcvf ${POOL_PATH}/${BACKUP_PATH}/${BACKUP_NAME} ./"
   echo "Backup complete file located at ${POOL_PATH}/${BACKUP_PATH}/${BACKUP_NAME}"
 elif [ $choice == "R" ] || [ $choice == "r" ]; then
