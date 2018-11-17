@@ -27,7 +27,7 @@ CONFIGS_PATH=$SCRIPTPATH/configs
 DB_ROOT_PASSWORD=$(openssl rand -base64 16)
 DB_PASSWORD=$(openssl rand -base64 16)
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
 
 # Check for emby-config and set configuration
 if ! [ -e $SCRIPTPATH/emby-config ]; then
@@ -78,7 +78,7 @@ fi
 #wget https://raw.githubusercontent.com/MediaBrowser/iocage-amd64/master/emby-server.json
 
 echo '{"pkgs":["nano","mono","libass","fontconfig","freetype2","fribidi","gnutls","iconv","opus","samba48","sqlite3","libtheora","libva","libvorbis","webp","libx264","libzvbi"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
 #echo '{"pkgs":["nano","mono","libass","fontconfig","freetype2","fribidi","gnutls","iconv","opus"."samba48",sqlite3","libtheora","libva","liborbis","webp","libx264","libvbi"]}' > /tmp/pkg.json
 #iocage create --name "${JAIL_NAME}" -p --name emby-server.json ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" 
