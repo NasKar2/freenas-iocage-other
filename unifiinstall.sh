@@ -25,7 +25,7 @@ CONFIGS_PATH=$SCRIPTPATH/configs
 DB_ROOT_PASSWORD=$(openssl rand -base64 16)
 DB_PASSWORD=$(openssl rand -base64 16)
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
 
 # Check for unifi-config and set configuration
 if ! [ -e $SCRIPTPATH/unifi-config ]; then
@@ -70,7 +70,7 @@ fi
 # Create Jail
 #echo '{"pkgs":["nano","nginx","php56-xml","php56-hash","php56-gd","php56-curl","php56-tokenizer","php56-zlib","php56-zip","mysql56-server","php56","php56-mysql"]}' > /tmp/pkg.json
 echo '{"pkgs":["nano","bash","llvm40","openjdk8","unifi5"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
 rm /tmp/pkg.json
 iocage exec ${JAIL_NAME} sysrc unifi_enable="YES"
