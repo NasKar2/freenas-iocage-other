@@ -28,7 +28,7 @@ if [ -z $DB_PASSWORD  ]; then
 fi
 echo "the DB_PASSWORD ${DB_PASSWORD}"
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
 
 # Check for wp-config and set configuration
 if ! [ -e $SCRIPTPATH/wp-config ]; then
@@ -78,7 +78,7 @@ fi
 #php 7.2
 echo '{"pkgs":["nano","rsync","nginx","mariadb102-server","php72","php72-mysqli","php72-session","php72-xml","php72-hash","php72-ftp","php72-curl","php72-tokenizer","php72-zlib","php72-zip","php72-filter","php72-gd","php72-openssl"]}' > /tmp/pkg.json
 
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
 rm /tmp/pkg.json
 
