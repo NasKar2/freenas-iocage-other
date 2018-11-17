@@ -25,7 +25,7 @@ CONFIGS_PATH=$SCRIPTPATH/configs
 DB_ROOT_PASSWORD=$(openssl rand -base64 16)
 DB_PASSWORD=$(openssl rand -base64 16)
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
 
 # Check for jackett-config and set configuration
 if ! [ -e $SCRIPTPATH/jackett-config ]; then
@@ -70,7 +70,7 @@ fi
 # Create Jail
 
 echo '{"pkgs":["nano","mono","curl","ca_root_nss"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
 rm /tmp/pkg.json
 iocage exec ${JAIL_NAME} sysrc jackett_enable="YES"
