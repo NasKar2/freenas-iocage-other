@@ -89,6 +89,14 @@ iocage exec ${JAIL_NAME} pkg add https://github.com/MediaBrowser/Emby.Releases/r
 
 rm /tmp/pkg.json
 
+# fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release
+# source: https://forums.freenas.org/index.php?threads/openvpn-fails-in-jail-with-libdl-so-1-not-found-error.70391/
+if [ "${RELEASE}" = "11.1-RELEASE" ]; then
+  iocage exec ${JAIL_NAME} sed -i '' "s/quarterly/release_2/" /etc/pkg/FreeBSD.conf
+  iocage exec ${JAIL_NAME} pkg update -f
+  iocage exec ${JAIL_NAME} pkg upgrade -yf
+fi
+
 #
 # needed for installing from ports
 #mkdir -p ${PORTS_PATH}/ports
