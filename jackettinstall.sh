@@ -70,7 +70,7 @@ fi
 # Create Jail
 
 echo '{"pkgs":["nano","mono","curl","ca_root_nss"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r ${RELEASE} ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
 rm /tmp/pkg.json
 iocage exec ${JAIL_NAME} sysrc jackett_enable="YES"
@@ -127,5 +127,5 @@ iocage restart ${JAIL_NAME}
 
 echo
 
-echo "Jackett should be available at http://<JailIP>:9117"
+echo "Jackett should be available at http://${JAIL_IP}:9117"
 

@@ -77,7 +77,7 @@ fi
 # Create Jail
 #wget https://raw.githubusercontent.com/MediaBrowser/iocage-amd64/master/emby-server.json
 
-echo '{"pkgs":["nano","mono","libass","fontconfig","freetype2","fribidi","gnutls","iconv","opus","samba48","sqlite3","libtheora","libva","libvorbis","webp","libx264","libzvbi"]}' > /tmp/pkg.json
+echo '{"pkgs":["nano","mono","libass","fontconfig","freetype2","fribidi","gnutls","iconv","opus","samba48","sqlite3","libtheora","libva","libvorbis","webp","libx264","libzvbi","libraw"]}' > /tmp/pkg.json
 iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
 #echo '{"pkgs":["nano","mono","libass","fontconfig","freetype2","fribidi","gnutls","iconv","opus"."samba48",sqlite3","libtheora","libva","liborbis","webp","libx264","libvbi"]}' > /tmp/pkg.json
@@ -85,7 +85,8 @@ iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INT
 #iocage create --name "${JAIL_NAME}" -p --name /tmp/pkg.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" 
 #iocage create --name "${JAIL_NAME}" -p emby-server.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 #host_hostname="${JAIL_NAME}" vnet="${VNET}"
-iocage exec ${JAIL_NAME} pkg add https://github.com/MediaBrowser/Emby.Releases/releases/download/3.5.2.0/emby-server-freebsd_3.5.2.0_amd64.txz
+#iocage exec ${JAIL_NAME} pkg add https://github.com/MediaBrowser/Emby.Releases/releases/download/3.5.3.0/emby-server-freebsd_3.5.3.0_amd64.txz
+iocage exec ${JAIL_NAME} pkg add -f https://github.com/MediaBrowser/Emby.Releases/releases/download/3.6.0.76/emby-server-freebsd_3.6.0.76_amd64.txz
 
 rm /tmp/pkg.json
 

@@ -93,6 +93,16 @@ iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${urbackup_config} /config nullfs rw 0 0
 
+# fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release
+# source: https://forums.freenas.org/index.php?threads/openvpn-fails-in-jail-with-libdl-so-1-not-found-error.70391/
+if [ "${RELEASE}" = "11.1-RELEASE" ]; then
+#  iocage exec ${JAIL_NAME} sed -i '' "s/quarterly/release_2/" /etc/pkg/FreeBSD.conf
+#  iocage exec ${JAIL_NAME} pkg update -f
+#  iocage exec ${JAIL_NAME} pkg upgrade -yf
+#iocage exec ${JAIL_NAME} cp -f /mnt/configs/libdl.so* /usr/lib/
+iocage exec ${JAIL_NAME} cp -f /mnt/configs/libdl.so* /usr/lib/
+fi
+
 #
 # Install UrBackup
 

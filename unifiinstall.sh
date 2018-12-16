@@ -70,9 +70,19 @@ fi
 # Create Jail
 #echo '{"pkgs":["nano","nginx","php56-xml","php56-hash","php56-gd","php56-curl","php56-tokenizer","php56-zlib","php56-zip","mysql56-server","php56","php56-mysql"]}' > /tmp/pkg.json
 echo '{"pkgs":["nano","bash","llvm40","openjdk8","unifi5"]}' > /tmp/pkg.json
+echo $RELEASE
 iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
 rm /tmp/pkg.json
+
+# fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release
+# source: https://forums.freenas.org/index.php?threads/openvpn-fails-in-jail-with-libdl-so-1-not-found-error.70391/
+#if [ "${RELEASE}" = "11.1-RELEASE" ]; then
+#  iocage exec ${JAIL_NAME} sed -i '' "s/quarterly/release_2/" /etc/pkg/FreeBSD.conf
+#  iocage exec ${JAIL_NAME} pkg update -f
+#  iocage exec ${JAIL_NAME} pkg upgrade -yf
+#fi
+
 iocage exec ${JAIL_NAME} sysrc unifi_enable="YES"
 iocage exec ${JAIL_NAME} service unifi start
 
