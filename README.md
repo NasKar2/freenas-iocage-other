@@ -8,6 +8,8 @@ Unifi etc. will be placed in a jail with separate data directory (/mnt/v1/apps/.
 
 The Emby user is emby:emby and the user media added to jail.  emby is added to the media group
 
+LazyLibrarian added config file in jail at /usr/local/share/lazylibrarian/config.ini
+
 ### Prerequisites
 Edit file unifi-config
 
@@ -87,6 +89,21 @@ POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
 JAIL_NAME="urbackup"
 URBACKUP_DATA="urbackup"
+```
+
+Create lazylib-config.
+
+```
+JAIL_IP="192.168.5.254"
+DEFAULT_GW_IP="192.168.5.1"
+INTERFACE="em0"
+VNET="off"
+JAIL_NAME="lazylib"
+POOL_PATH="/mnt/v1"
+APPS_PATH="apps"
+LAZYLIB_DATA="lazylib"
+MEDIA_LOCATION="media"
+TORRENTS_LOCATION="torrents"
 ```
 
 ## Install Unifi in fresh Jail
