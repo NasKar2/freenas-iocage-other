@@ -2,7 +2,7 @@
 
 #### https://github.com/NasKar2/freenas-iocage-other.git
 
-Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Unifi, Emby, Wordpress, Jackett, UrBackup and Backup/Restore Wordpress
+Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Unifi, Emby, Wordpress, Jackett, UrBackup LazyLibrarian and Backup/Restore Wordpress
 
 Unifi etc. will be placed in a jail with separate data directory (/mnt/v1/apps/...) to allow for easy reinstallation/backup.
 
