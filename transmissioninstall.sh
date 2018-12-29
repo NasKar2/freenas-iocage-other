@@ -77,13 +77,13 @@ fi
 echo '{"pkgs":["bash","unzip","unrar","transmission","openvpn","ca_root_nss"]}' > /tmp/pkg.json
 iocage create -n "${JAIL_NAME}" -p /tmp/pkg.json -r ${RELEASE} ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" vnet="on" allow_raw_sockets="1" boot="on" allow_tun="1"
 rm /tmp/pkg.json
+transmission_config=${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${transmission_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
 
 #iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
 
-transmission_config=${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
 iocage exec "${JAIL_NAME}" mkdir -p /config/transmission-home
