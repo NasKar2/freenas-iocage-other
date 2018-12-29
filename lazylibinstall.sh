@@ -93,7 +93,7 @@ fi
 
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${LAZYLIB_DATA}
 mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/books
-
+mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/downloads/sabnzbd/complete/books
 echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${LAZYLIB_DATA}'"
 
 lazylib_config=${POOL_PATH}/${APPS_PATH}/${LAZYLIB_DATA}
@@ -107,30 +107,26 @@ iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${lazylib_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION}/books /mnt/books nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION}/books /mnt/torrents nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION}/downloads/sabnzbd/complete/books /mnt/sabnzbd/books nullfs rw 0 0
+#iocage exec ${JAIL_NAME} -- mkdir /usr/local/share/
 iocage exec ${JAIL_NAME} git clone https://gitlab.com/LazyLibrarian/LazyLibrarian.git /usr/local/share/lazylibrarian
-iocage exec ${JAIL_NAME} python /usr/local/share/lazylibrarian/LazyLibrarian.py -d
-exit
+#iocage exec ${JAIL_NAME} python /usr/local/share/lazylibrarian/LazyLibrarian.py -d
+#exit
 #iocage exec ${JAIL_NAME} chown -R media:media /usr/local/share/LazyLibrarian /config
-iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
+#iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
 #iocage exec ${JAIL_NAME} "pw groupmod media -m git_daemon"
 #iocage exec ${JAIL_NAME} chown -R root:wheel /usr/local/share/lazylibrarian /config
 
-
+echo "make rc.d dir for lazylib"
 #iocage exec ${JAIL_NAME} -- mkdir /usr/local/etc/rc.d
-#iocage exec ${JAIL_NAME} cp -f /mnt/configs/emby-server /usr/local/etc/rc.d/emby-server
-#iocage exec ${JAIL_NAME} chmod u+x /usr/local/etc/rc.d/emby-server
+#iocage exec ${JAIL_NAME} cp -f /mnt/configs/lazylibrarian /usr/local/etc/rc.d/lazylibrarian
+#iocage exec ${JAIL_NAME} chmod u+x /usr/local/etc/rc.d/lazylibrarian
 #iocage exec ${JAIL_NAME} sed -i '' "s/embydata/${LAZYLIB_DATA}/" /usr/local/etc/rc.d/sonarr
-iocage exec ${JAIL_NAME} sysrc lazylibrarian_enable="YES"
+#iocage exec ${JAIL_NAME} sysrc lazylibrarian_enable="YES"
 #iocage exec ${JAIL_NAME} sysrc lazylibrarian_user="git_daemon"
 #iocage exec ${JAIL_NAME} sysrc lazylibrarian_dir="/mnt/books"
-iocage exec ${JAIL_NAME} service lazylibrarian start
-
-iocage restart ${JAIL_NAME}
-echo "LAZYLIB installed"
-echo "LAZYLIB can be found at http://${JAIL_IP}:5299"
-exit
+#iocage exec ${JAIL_NAME} service lazylibrarian start
 
 #
 # Make pkg upgrade get the latest repo
@@ -150,8 +146,9 @@ iocage restart ${JAIL_NAME}
 # Make media owner of data directories
 #chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
 #chown -R media:media ${POOL_PATH}/${TORRENTS_LOCATION}
+iocage exec ${JAIL_NAME} python /usr/local/share/lazylibrarian/LazyLibrarian.py -d
 
 echo
 
-echo "LAZYLIB should be available at http://${JAIL_IP}:5299"
+echo "LAZYLIBRARIAN should be available at http://${JAIL_IP}:5299"
 
