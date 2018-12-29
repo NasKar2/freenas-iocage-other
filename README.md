@@ -2,7 +2,7 @@
 
 #### https://github.com/NasKar2/freenas-iocage-other.git
 
-Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Unifi, Emby, Wordpress, Jackett, UrBackup LazyLibrarian and Backup/Restore Wordpress
+Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Unifi, Emby, Wordpress, Jackett, UrBackup, Transmission, LazyLibrarian and Backup/Restore Wordpress
 
 Unifi etc. will be placed in a jail with separate data directory (/mnt/v1/apps/...) to allow for easy reinstallation/backup.
 
@@ -104,6 +104,54 @@ APPS_PATH="apps"
 LAZYLIB_DATA="lazylib"
 MEDIA_LOCATION="media"
 TORRENTS_LOCATION="torrents"
+```
+
+Create transmission-config.
+```
+JAIL_IP="192.168.5.76"
+DEFAULT_GW_IP="192.168.5.1"
+INTERFACE="vnet0"
+VNET="on"
+JAIL_NAME="transmission"
+POOL_PATH="/mnt/v1"
+APPS_PATH="apps"
+TRANSMISSION_DATA="transmission"
+TORRENTS_LOCATION="torrents"
+```
+Create openvpn.conf and pass.txt files. Example files shown, you have to edit the details
+```
+client
+dev tun
+proto udp
+remote vpnaddress.com 1194
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+persist-remote-ip
+ca vpn.crt
+
+tls-client
+remote-cert-tls server
+#auth-user-pass
+auth-user-pass /config/pass.txt
+comp-lzo
+verb 3
+
+auth SHA256
+cipher AES-256-CBC
+
+<ca>
+-----BEGIN CERTIFICATE-----
+MIIESDC...............
+-----END CERTIFICATE-----
+</ca>
+
+```
+pass.txt
+```
+vpn_username
+vpn_password
 ```
 
 ## Install Unifi in fresh Jail
