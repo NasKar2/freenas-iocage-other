@@ -75,10 +75,14 @@ fi
 #
 # Create Jail
 echo '{"pkgs":["bash","unzip","unrar","transmission","openvpn","ca_root_nss"]}' > /tmp/pkg.json
+
 iocage create -n "${JAIL_NAME}" -p /tmp/pkg.json -r ${RELEASE} ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" vnet="on" allow_raw_sockets="1" boot="on" allow_tun="1"
 rm /tmp/pkg.json
 transmission_config=${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
+mkdir -p ${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
+echo "mkdir -p ${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}"
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
+echo ${transmission_config}
 iocage fstab -a ${JAIL_NAME} ${transmission_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
 
@@ -87,7 +91,7 @@ iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nul
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
 iocage exec "${JAIL_NAME}" mkdir -p /config/transmission-home
-iocage exec "${JAIL_NAME}" chown -R transmission:transmission /config/transmission-home /config /mnt/torrents
+iocage exec "${JAIL_NAME}" chown -R transmission:transmission /config /mnt/torrents
 
 # ipfw_rules
 iocage exec ${JAIL_NAME} cp -f /mnt/configs/ipfw_rules /config/ipfw_rules
@@ -118,9 +122,9 @@ iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent
 iocage exec ${JAIL_NAME} "pw groupmod media -m transmission"
 iocage exec ${JAIL_NAME} "pw groupmod transmission -m media"
 iocage exec ${JAIL_NAME} sed -i '' "s/transmission_user=\"transmission\"/transmission_user=\"media\"/" /usr/local/etc/rc.d/transmission
-iocage exec ${JAIL_NAME} chown -R media:media /config
-
-
+iocage exec ${JAIL_NAME} chown -R media:media /config /usr/local/etc/rc.d/transmission
+iocage exec ${JAIL_NAME} sysrc transmission_user="media"
+iocage exec ${JAIL_NAME} sysrc transmission_group="media"
 
 service transmission start
 
