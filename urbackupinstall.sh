@@ -70,8 +70,11 @@ fi
 # Create Jail
 
 echo '{"pkgs":["nano","cryptopp","urbackup-server"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" allow_raw_sockets="1"
-
+if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+then
+	echo "Failed to create jail"
+	exit 1
+fi
 rm /tmp/pkg.json
 
 #

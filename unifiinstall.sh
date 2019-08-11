@@ -71,8 +71,11 @@ fi
 #echo '{"pkgs":["nano","nginx","php56-xml","php56-hash","php56-gd","php56-curl","php56-tokenizer","php56-zlib","php56-zip","mysql56-server","php56","php56-mysql"]}' > /tmp/pkg.json
 echo '{"pkgs":["nano","bash","llvm40","openjdk8","unifi5"]}' > /tmp/pkg.json
 echo $RELEASE
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
-
+if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+then
+	echo "Failed to create jail"
+	exit 1
+fi
 rm /tmp/pkg.json
 
 # fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release
