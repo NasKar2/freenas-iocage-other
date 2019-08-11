@@ -91,7 +91,8 @@ rm /tmp/pkg.json
 #iocage create --name "${JAIL_NAME}" -p emby-server.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 #host_hostname="${JAIL_NAME}" vnet="${VNET}"
 #iocage exec ${JAIL_NAME} pkg add https://github.com/MediaBrowser/Emby.Releases/releases/download/3.5.3.0/emby-server-freebsd_3.5.3.0_amd64.txz
-iocage exec ${JAIL_NAME} pkg add -f https://github.com/MediaBrowser/Emby.Releases/releases/download/3.6.0.76/emby-server-freebsd_3.6.0.76_amd64.txz
+#iocage exec ${JAIL_NAME} pkg add -f https://github.com/MediaBrowser/Emby.Releases/releases/download/3.6.0.76/emby-server-freebsd_3.6.0.76_amd64.txz
+iocage exec ${JAIL_NAME} pkg add -f https://github.com/MediaBrowser/Emby.Releases/releases/download/4.3.0.2/emby-server-freebsd12_4.3.0.2_amd64.txz
 
 # fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release
 # source: https://forums.freenas.org/index.php?threads/openvpn-fails-in-jail-with-libdl-so-1-not-found-error.70391/
