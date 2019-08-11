@@ -81,6 +81,14 @@ rm /tmp/pkg.json
 transmission_config=${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
 echo "mkdir -p ${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}"
+
+# create dir in jail for mount points
+iocage exec ${JAIL_NAME} mkdir -p /usr/ports
+iocage exec ${JAIL_NAME} mkdir -p /var/db/portsnap
+iocage exec ${JAIL_NAME} mkdir -p /config
+iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
+iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents
+
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 echo ${transmission_config}
 iocage fstab -a ${JAIL_NAME} ${transmission_config} /config nullfs rw 0 0
