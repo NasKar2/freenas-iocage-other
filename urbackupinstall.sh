@@ -88,6 +88,12 @@ echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${URBACKUP_DATA}'"
 urbackup_config=${POOL_PATH}/${APPS_PATH}/${URBACKUP_DATA}
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
+# create dir in jail for mount points
+iocage exec ${JAIL_NAME} mkdir -p /usr/ports
+iocage exec ${JAIL_NAME} mkdir -p /var/db/portsnap
+iocage exec ${JAIL_NAME} mkdir -p /config
+iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
+
 #
 # mount ports so they can be accessed in the jail
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/ports /usr/ports nullfs rw 0 0
