@@ -111,11 +111,18 @@ echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${EMBY_DATA}'"
 emby_config=${POOL_PATH}/${APPS_PATH}/${EMBY_DATA}
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
-#
+# create dir in jail for mount points
+iocage exec ${JAIL_NAME} mkdir -p /usr/ports
+iocage exec ${JAIL_NAME} mkdir -p /var/db/portsnap
+iocage exec ${JAIL_NAME} mkdir -p /config
+iocage exec ${JAIL_NAME} mkdir -p /mnt/media
+iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
+iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents
+
+
 # mount ports so they can be accessed in the jail
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/ports /usr/ports nullfs rw 0 0
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/db /var/db/portsnap nullfs rw 0 0
-
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${emby_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
