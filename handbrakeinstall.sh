@@ -1,6 +1,6 @@
 #!/bin/sh
 # Build an iocage jail under FreeNAS 11.1 with  handbrake
-# https://github.com/NasKar2/sepapps-freenas-iocage
+# https://github.com/NasKar2/freenas-iocage-other
 
 # Check for root privileges
 if ! [ $(id -u) = 0 ]; then
@@ -71,10 +71,13 @@ fi
 
 echo '{"pkgs":["nano","autoconf","automake","bash","bzip2","cmake","flac","fontconfig","freetype2","fribidi","git","gcc","lzma","m4","gmake","patch","gtar","harfbuzz","jansson","libass","libiconv","libogg","libsamplerate","libtheora","libtool","libvorbis","libx264","libxml2","nasm","opus","pkgconf","python","speex","yasm"]}' > /tmp/pkg.json
 #echo '{"pkgs":["nano","python","ffmpeg","handbrake","libass","lame"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r ${RELEASE} ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
-
+if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+then
+	echo "Failed to create jail"
+	exit 1
+fi
 rm /tmp/pkg.json
-exit
+
 iocage exec ${JAIL_NAME} sysrc handbrake_enable="YES"
 iocage exec ${JAIL_NAME} service handbrake start
 
