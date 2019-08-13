@@ -1,6 +1,6 @@
 #!/bin/sh
 # Build an iocage jail under FreeNAS 11.1 with  Transmission
-# https://github.com/NasKar2/sepapps-freenas-iocage
+# https://github.com/NasKar2/freenas-iocage-other
 
 # Check for root privileges
 if ! [ $(id -u) = 0 ]; then
@@ -76,12 +76,24 @@ fi
 #
 # Create Jail
 echo '{"pkgs":["bash","unzip","unrar","transmission","openvpn","ca_root_nss"]}' > /tmp/pkg.json
-
-iocage create -n "${JAIL_NAME}" -p /tmp/pkg.json -r ${RELEASE} ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" vnet="on" allow_raw_sockets="1" boot="on" allow_tun="1"
+if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+then
+	echo "Failed to create jail"
+	exit 1
+fi
 rm /tmp/pkg.json
+
 transmission_config=${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
 echo "mkdir -p ${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}"
+
+# create dir in jail for mount points
+iocage exec ${JAIL_NAME} mkdir -p /usr/ports
+iocage exec ${JAIL_NAME} mkdir -p /var/db/portsnap
+iocage exec ${JAIL_NAME} mkdir -p /config
+iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
+iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents
+
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 echo ${transmission_config}
 iocage fstab -a ${JAIL_NAME} ${transmission_config} /config nullfs rw 0 0

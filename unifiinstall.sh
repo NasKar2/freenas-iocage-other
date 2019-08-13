@@ -71,8 +71,11 @@ fi
 #echo '{"pkgs":["nano","nginx","php56-xml","php56-hash","php56-gd","php56-curl","php56-tokenizer","php56-zlib","php56-zip","mysql56-server","php56","php56-mysql"]}' > /tmp/pkg.json
 echo '{"pkgs":["nano","bash","llvm40","openjdk8","unifi5"]}' > /tmp/pkg.json
 echo $RELEASE
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
-
+if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+then
+	echo "Failed to create jail"
+	exit 1
+fi
 rm /tmp/pkg.json
 
 # fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release
@@ -97,6 +100,12 @@ echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${UNIFI_DATA}'"
 
 unifi_config=${POOL_PATH}/${APPS_PATH}/${UNIFI_DATA}
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
+
+# create dir in jail for mount points
+iocage exec ${JAIL_NAME} mkdir -p /usr/ports
+iocage exec ${JAIL_NAME} mkdir -p /var/db/portsnap
+iocage exec ${JAIL_NAME} mkdir -p /config
+iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 
 #
 # mount ports so they can be accessed in the jail

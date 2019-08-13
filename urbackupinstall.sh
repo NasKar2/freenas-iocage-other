@@ -70,8 +70,11 @@ fi
 # Create Jail
 
 echo '{"pkgs":["nano","cryptopp","urbackup-server"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" allow_raw_sockets="1"
-
+if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+then
+	echo "Failed to create jail"
+	exit 1
+fi
 rm /tmp/pkg.json
 
 #
@@ -84,6 +87,12 @@ echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${URBACKUP_DATA}'"
 
 urbackup_config=${POOL_PATH}/${APPS_PATH}/${URBACKUP_DATA}
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
+
+# create dir in jail for mount points
+iocage exec ${JAIL_NAME} mkdir -p /usr/ports
+iocage exec ${JAIL_NAME} mkdir -p /var/db/portsnap
+iocage exec ${JAIL_NAME} mkdir -p /config
+iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 
 #
 # mount ports so they can be accessed in the jail
