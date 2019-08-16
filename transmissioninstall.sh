@@ -85,7 +85,7 @@ rm /tmp/pkg.json
 
 transmission_config=${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
-echo "mkdir -p ${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}"
+#echo "mkdir -p ${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}"
 
 # create dir in jail for mount points
 iocage exec ${JAIL_NAME} mkdir -p /usr/ports
@@ -95,7 +95,7 @@ iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents
 
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
-echo ${transmission_config}
+# echo ${transmission_config}
 iocage fstab -a ${JAIL_NAME} ${transmission_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
 
@@ -127,19 +127,20 @@ iocage exec ${JAIL_NAME} service ipfw start
 iocage exec ${JAIL_NAME} service openvpn start
 iocage exec ${JAIL_NAME} service transmission start
 
-service transmission stop
+iocage exec ${JAIL_NAME} service transmission stop
 iocage exec ${JAIL_NAME} sed -i '' "s/\"rpc-whitelist\": \"127.0.0.1\",/\"rpc-whitelist\": \"127.0.0.1,${JAIL_IP}\",/" /config/transmission-home/settings.json
 
 # Change user to media
 iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
 iocage exec ${JAIL_NAME} "pw groupmod media -m transmission"
 iocage exec ${JAIL_NAME} "pw groupmod transmission -m media"
-iocage exec ${JAIL_NAME} sed -i '' "s/transmission_user=\"transmission\"/transmission_user=\"media\"/" /usr/local/etc/rc.d/transmission
+#iocage exec ${JAIL_NAME} sed -i '' "s/transmission_user=\"transmission\"/transmission_user=\"media\"/" /usr/local/etc/rc.d/transmission
+iocage exec ${JAIL_NAME} sed -i '' "s/transmission_user:=transmission/transmission_user:=media/g" /usr/local/etc/rc.d/transmission
 iocage exec ${JAIL_NAME} chown -R media:media /config /usr/local/etc/rc.d/transmission
 iocage exec ${JAIL_NAME} sysrc transmission_user="media"
 iocage exec ${JAIL_NAME} sysrc transmission_group="media"
 
-service transmission start
+iocage exec ${JAIL_NAME} service transmission start
 
 
 # fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release

@@ -105,6 +105,8 @@ LAZYLIB_DATA="lazylib"
 MEDIA_LOCATION="media"
 TORRENTS_LOCATION="torrents"
 ```
+## Install Transmission in fresh Jail
+Will install as user transmission and the script will change it to media
 
 Create transmission-config.
 ```
@@ -118,7 +120,7 @@ APPS_PATH="apps"
 TRANSMISSION_DATA="transmission"
 TORRENTS_LOCATION="torrents"
 ```
-Create openvpn.conf and pass.txt files. Example files shown, you have to edit the details
+Create openvpn.conf and pass.txt files in config directory. Example files shown, you have to edit the details
 ```
 client
 dev tun
