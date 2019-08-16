@@ -129,6 +129,7 @@ iocage exec ${JAIL_NAME} service transmission start
 
 iocage exec ${JAIL_NAME} service transmission stop
 iocage exec ${JAIL_NAME} sed -i '' "s/\"rpc-whitelist\": \"127.0.0.1\",/\"rpc-whitelist\": \"127.0.0.1,${JAIL_IP}\",/" /config/transmission-home/settings.json
+iocage exec ${JAIL_NAME} sed -i '' 's/\"rpc-whitelist-enabled": \true/\"rpc-whitelist-enabled": \false/g' /config/transmission-home/settings.json
 
 # Change user to media
 iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
