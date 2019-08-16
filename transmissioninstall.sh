@@ -153,13 +153,13 @@ fi
 
 #
 # Make pkg upgrade get the latest repo
-#iocage exec ${JAIL_NAME} mkdir -p /usr/local/etc/pkg/repos/
-#iocage exec ${JAIL_NAME} cp -f /mnt/configs/FreeBSD.conf /usr/local/etc/pkg/repos/FreeBSD.conf
+iocage exec ${JAIL_NAME} mkdir -p /usr/local/etc/pkg/repos/
+iocage exec ${JAIL_NAME} cp -f /mnt/configs/FreeBSD.conf /usr/local/etc/pkg/repos/FreeBSD.conf
 
 #
 # Upgrade to the lastest repo
-#iocage exec ${JAIL_NAME} pkg upgrade -y
-#iocage restart ${JAIL_NAME}
+iocage exec ${JAIL_NAME} pkg upgrade -y
+iocage restart ${JAIL_NAME}
 
 #
 # remove /mnt/configs as no longer needed
