@@ -1,6 +1,6 @@
 #!/bin/sh
-# Build an iocage jail under FreeNAS 11.1 with  UrBackup
-# https://github.com/NasKar2/sepapps-freenas-iocage
+# Build an iocage jail under FreeNAS 11.2 with  UrBackup
+# https://github.com/NasKar2/freenas-iocage-other
 
 # Check for root privileges
 if ! [ $(id -u) = 0 ]; then

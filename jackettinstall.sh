@@ -1,6 +1,6 @@
 #!/bin/sh
-# Build an iocage jail under FreeNAS 11.1 with  Jackett
-# https://github.com/NasKar2/sepapps-freenas-iocage
+# Build an iocage jail under FreeNAS 12.1 with  Jackett
+# https://github.com/NasKar2/freenas-iocage-other
 
 # Check for root privileges
 if ! [ $(id -u) = 0 ]; then

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Build an iocage jail under FreeNAS 11.1 with  Transmission
+# Build an iocage jail under FreeNAS 11.2 with  Transmission
 # https://github.com/NasKar2/freenas-iocage-other
 
 # Check for root privileges
