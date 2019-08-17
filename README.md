@@ -108,6 +108,10 @@ TORRENTS_LOCATION="torrents"
 ## Install Transmission in fresh Jail
 Will install as user transmission and the script will change it to media
 
+The script will add in this example 192.168.5.* to the rpc-whitelist so transmission can be accessed from your network.
+
+If your changes more that just the last octet: After stopping the service transmission you will have to manually edit the setting.json file in the config folder.
+
 Create transmission-config.
 ```
 JAIL_IP="192.168.5.76"
