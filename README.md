@@ -169,6 +169,14 @@ Then run this command to install Unifi
 ./unifiinstall.sh
 ```
 
+## Install Lazylibrarian in fresh jail
+
+create lazylib-config as referenced above
+
+Run the script ./lazylibinstall.sh
+
+After install follow directions between the red stars
+
 Other apps can be installed with ./AppNameinstall.sh
 
 ## After install
