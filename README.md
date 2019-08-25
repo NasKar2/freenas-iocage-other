@@ -176,8 +176,9 @@ create lazylib-config as referenced above
 Run the script ./lazylibinstall.sh
 
 After install follow directions between the red stars
-```
+
 go into jail and execute these commands
+```
 iocage console ${JAIL_NAME}
 cd /urllib3
 python setup.py install
