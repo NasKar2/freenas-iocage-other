@@ -90,11 +90,11 @@ if [ "${RELEASE}" = "11.1-RELEASE" ]; then
 fi
 
 # Create directories in FN
-mkdir -p /mnt/v1/media/audiobooks
-mkdir -p /mnt/v1/media/comics
-mkdir -p /mnt/v1/media/magazines
-mkdir -p /mnt/v1/media/books
-
+mkdir -p ${POOL_PATH}/media/audiobooks
+mkdir -p ${POOL_PATH}/media/comics
+mkdir -p ${POOL_PATH}/media/magazines
+mkdir -p ${POOL_PATH}/media/books
+mkdir -p ${POOL_PATH}/media/downloads/sabnzbd/complete/books
 #
 # Create directories in jail
 iocage exec ${JAIL_NAME} "mkdir -p /usr/local/etc/pkg/repos"
@@ -108,18 +108,18 @@ iocage exec ${JAIL_NAME} "mkdir -p /mnt/media/comics"
 iocage exec ${JAIL_NAME} "mkdir -p /mnt/media/magazines"
 
 # create the apps dirs:
-mkdir -p /mnt/v1/apps/${JAIL_NAME}
+mkdir -p ${POOL_PATH}/${APPS_PATH}/${JAIL_NAME}
 iocage exec ${JAIL_NAME} "mkdir -p /usr/local/etc/pkg/repos"
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} /mnt/v1/apps/_common_/repos /usr/local/etc/pkg/repos nullfs ro 0 0
-iocage fstab -a ${JAIL_NAME} /mnt/v1/apps/${JAIL_NAME} /config nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} /mnt/v1/torrents /mnt/torrents nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} /mnt/v1/nzb /mnt/nzb nullfs rw 0 0
-#iocage fstab -a ${JAIL_NAME} /mnt/v1/media/audiobooks /mnt/media/audiobooks nullfs rw 0 0
-#iocage fstab -a ${JAIL_NAME} /mnt/v1/media/books /mnt/media/books nullfs rw 0 0
-#iocage fstab -a ${JAIL_NAME} /mnt/v1/media/comics /mnt/media/comics nullfs rw 0 0
-#iocage fstab -a ${JAIL_NAME} /mnt/v1/media/magazines /mnt/media/magazines nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} /mnt/v1/media /mnt/media nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${APPS_PATH}/_common_/repos /usr/local/etc/pkg/repos nullfs ro 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${APPS_PATH}/${JAIL_NAME} /config nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/torrents /mnt/torrents nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/nzb /mnt/nzb nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media/audiobooks /mnt/media/audiobooks nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media/books /mnt/media/books nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media/comics /mnt/media/comics nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media/magazines /mnt/media/magazines nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media /mnt/media nullfs rw 0 0
 
 # the above structure is similar to what I use, but it can obviously adapted
 
