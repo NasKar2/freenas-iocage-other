@@ -115,10 +115,12 @@ iocage fstab -a ${JAIL_NAME} /mnt/v1/apps/_common_/repos /usr/local/etc/pkg/repo
 iocage fstab -a ${JAIL_NAME} /mnt/v1/apps/${JAIL_NAME} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} /mnt/v1/torrents /mnt/torrents nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} /mnt/v1/nzb /mnt/nzb nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} /mnt/v1/media/audiobooks /mnt/media/audiobooks nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} /mnt/v1/media/books /mnt/media/books nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} /mnt/v1/media/comics /mnt/media/comics nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} /mnt/v1/media/magazines /mnt/media/magazines nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} /mnt/v1/media/audiobooks /mnt/media/audiobooks nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} /mnt/v1/media/books /mnt/media/books nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} /mnt/v1/media/comics /mnt/media/comics nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} /mnt/v1/media/magazines /mnt/media/magazines nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} /mnt/v1/media /mnt/media nullfs rw 0 0
+
 # the above structure is similar to what I use, but it can obviously adapted
 
 # getting Lazylibrarian:
