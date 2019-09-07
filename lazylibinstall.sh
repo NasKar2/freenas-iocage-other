@@ -76,7 +76,7 @@ fi
 # Create Jail
 
 #echo '{"pkgs":["nano","unrar","git","wget","","python","py27-sqlite3"]}' > /tmp/pkg.json
-echo '{"pkgs":["git","wget","openssl","readline","pcre","libnghttp2","python36","py36-setuptools","py36-sqlite3","py36-openssl","unrar","ca_root_nss"]}' > /tmp/pkg.json
+echo '{"pkgs":["nano","git","wget","openssl","readline","pcre","libnghttp2","python36","py36-setuptools","py36-sqlite3","py36-openssl","unrar","ca_root_nss"]}' > /tmp/pkg.json
 iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
 rm /tmp/pkg.json
