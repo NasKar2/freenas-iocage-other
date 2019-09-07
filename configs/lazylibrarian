@@ -33,7 +33,7 @@ load_rc_config ${name}
 : ${lazylibrarian_user:="media"}
 : ${lazylibrarian_dir:="/usr/local/lazylibrarian"}
 : ${lazylibrarian_chdir:="${lazylibrarian_dir}"}
-: ${lazylibrarian_datadir:="${lazylibrarian_dir}"}
+: ${lazylibrarian_datadir:="/config"}
 : ${lazylibrarian_pid:="${lazylibrarian_datadir}/lazylibrarian.pid"}
 : ${lazylibrarian_conf:="${lazylibrarian_datadir}/config.ini"}
 : ${lazylibrarian_flags:=""}
