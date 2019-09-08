@@ -100,7 +100,7 @@ mkdir -p ${POOL_PATH}/media/downloads/sabnzbd/complete/books
 iocage exec ${JAIL_NAME} "mkdir -p /usr/local/etc/pkg/repos"
 iocage exec ${JAIL_NAME} "mkdir -p /config"
 iocage exec ${JAIL_NAME} "mkdir -p /mnt/configs"
-iocage exec ${JAIL_NAME} "mkdir -p /mnt/torrents"
+iocage exec ${JAIL_NAME} "mkdir -p /mnt/torrents/books"
 iocage exec ${JAIL_NAME} "mkdir -p /mnt/nzb"
 iocage exec ${JAIL_NAME} "mkdir -p /mnt/media/audiobooks"
 iocage exec ${JAIL_NAME} "mkdir -p /mnt/media/books"
@@ -109,32 +109,28 @@ iocage exec ${JAIL_NAME} "mkdir -p /mnt/media/magazines"
 
 # create the apps dirs:
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${JAIL_NAME}
-iocage exec ${JAIL_NAME} "mkdir -p /usr/local/etc/pkg/repos"
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${APPS_PATH}/_common_/repos /usr/local/etc/pkg/repos nullfs ro 0 0
+#iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${APPS_PATH}/_common_/repos /usr/local/etc/pkg/repos nullfs ro 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${APPS_PATH}/${JAIL_NAME} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/torrents /mnt/torrents nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/nzb /mnt/nzb nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/nzb /mnt/nzb nullfs rw 0 0
 #iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media/audiobooks /mnt/media/audiobooks nullfs rw 0 0
 #iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media/books /mnt/media/books nullfs rw 0 0
 #iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media/comics /mnt/media/comics nullfs rw 0 0
 #iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media/magazines /mnt/media/magazines nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media /mnt/media nullfs rw 0 0
 
-# the above structure is similar to what I use, but it can obviously adapted
+# the above structure is similar to what I use, but it can obviously be adapted
 
 # getting Lazylibrarian:
 iocage exec ${JAIL_NAME} "ln -s /usr/local/bin/python3.6 /usr/local/bin/python"
 iocage exec ${JAIL_NAME} git clone https://gitlab.com/LazyLibrarian/LazyLibrarian.git /usr/local/share/lazylibrarian
 
 # this is requested (don't know why), and cannot install it from FN:
-#iocage exec ${JAIL_NAME} "export PATH=$PATH:/urllib3"
 iocage exec ${JAIL_NAME} "git clone git://github.com/urllib3/urllib3.git /urllib3"
-#iocage exec ${JAIL_NAME} "cd /urllib3"
-#echo "cd /urllib3"
-#iocage exec ${JAIL_NAME} "python /urllib3/setup.py install"
-#echo "rm -rf /urllib3"
-#iocage exec ${JAIL_NAME} "rm -rf /urllib3"
+iocage exec lazylib "cd /urllib3 && python setup.py install"
+echo "rm -rf /urllib3"
+iocage exec ${JAIL_NAME} "rm -rf /urllib3"
 
 # defining the rights and prepare the setup:
 iocage exec ${JAIL_NAME} "pw user add lazylibrarian -c lazylibrarian -u 111 -d /nonexistent -s /usr/bin/nologin"
@@ -204,15 +200,6 @@ chown -R media:media ${POOL_PATH}/${TORRENTS_LOCATION}
 #iocage exec ${JAIL_NAME} python /usr/local/share/lazylibrarian/LazyLibrarian.py -d
 iocage exec ${JAIL_NAME} "service lazylibrarian start"
 echo
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-printf "${RED}****************************************************${NC}\n"
-echo "go into jail and execute these commands"
-echo "iocage console ${JAIL_NAME}"
-echo "cd /urllib3"
-echo "python setup.py install"
-echo "exit" 
-printf "${RED}****************************************************${NC}\n"
 echo
 echo "LAZYLIBRARIAN should be available at http://${JAIL_IP}:5299"
 
