@@ -25,7 +25,8 @@ CONFIGS_PATH=$SCRIPTPATH/configs
 DB_ROOT_PASSWORD=$(openssl rand -base64 16)
 DB_PASSWORD=$(openssl rand -base64 16)
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
+RELEASE="11.3-RELEASE"
+#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
 
 # Check for urbackup-config and set configuration
 if ! [ -e $SCRIPTPATH/urbackup-config ]; then

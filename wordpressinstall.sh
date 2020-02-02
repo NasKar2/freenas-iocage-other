@@ -28,7 +28,8 @@ if [ -z $DB_PASSWORD  ]; then
 fi
 echo "the DB_PASSWORD ${DB_PASSWORD}"
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
+RELEASE="11.3-RELEASE"
+#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
 
 # Check for wp-config and set configuration
 if ! [ -e $SCRIPTPATH/wp-config ]; then
