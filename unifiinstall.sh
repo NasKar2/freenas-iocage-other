@@ -69,7 +69,7 @@ fi
 
 #
 # Create Jail
-#echo '{"pkgs":["nano","nginx","php56-xml","php56-hash","php56-gd","php56-curl","php56-tokenizer","php56-zlib","php56-zip","mysql56-server","php56","php56-mysql"]}' > /tmp/pkg.json
+#echo '{"pkgs":["nano","nginx","php73-xml","php73-hash","php73-gd","php73-curl","php73-tokenizer","php73-zlib","php73-zip","mysql56-server","php73","php73-mysql"]}' > /tmp/pkg.json
 echo '{"pkgs":["nano","bash","llvm40","openjdk8","unifi5"]}' > /tmp/pkg.json
 echo $RELEASE
 if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
