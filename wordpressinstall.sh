@@ -76,8 +76,8 @@ fi
 # php 7.1
 #echo '{"pkgs":["nano","rsync","nginx","mariadb102-server","php71","php71-mcrypt","mod_php71","php71-mbstring","php71-curl","php71-zlib","php71-gd","php71-json","php71-mysqli"]}' > /tmp/pkg.json
 
-#php 7.2
-echo '{"pkgs":["nano","rsync","nginx","mariadb102-server","php72","php72-mysqli","php72-session","php72-xml","php72-hash","php72-ftp","php72-curl","php72-tokenizer","php72-zlib","php72-zip","php72-filter","php72-gd","php72-openssl"]}' > /tmp/pkg.json
+#php 7.3
+echo '{"pkgs":["nano","rsync","nginx","mariadb102-server","php73","php73-json","php73-mysqli","php73-session","php73-xml","php73-hash","php73-ftp","php73-curl","php73-tokenizer","php73-zlib","php73-zip","php73-filter","php73-gd","php73-openssl"]}' > /tmp/pkg.json
 if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 then
 	echo "Failed to create jail"

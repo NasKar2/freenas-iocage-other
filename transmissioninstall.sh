@@ -88,6 +88,9 @@ transmission_config=${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}
 #echo "mkdir -p ${POOL_PATH}/${APPS_PATH}/${TRANSMISSION_DATA}"
 
+# create torrent dir in base freenas
+mkdir -p "${POOL_PATH}/torrents"
+
 # create dir in jail for mount points
 iocage exec ${JAIL_NAME} mkdir -p /usr/ports
 iocage exec ${JAIL_NAME} mkdir -p /var/db/portsnap
@@ -106,7 +109,7 @@ iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
 iocage exec "${JAIL_NAME}" mkdir -p /config/transmission-home
 iocage exec "${JAIL_NAME}" chown -R transmission:transmission /config /mnt/torrents
-
+#iocage exec "${JAIL_NAME}" 'ifconfig tun create'
 # ipfw_rules
 iocage exec ${JAIL_NAME} cp -f /mnt/configs/ipfw_rules /config/ipfw_rules
 
@@ -124,8 +127,7 @@ iocage exec ${JAIL_NAME} sysrc "openvpn_configfile=/config/openvpn.conf"
 iocage exec ${JAIL_NAME} sysrc "transmission_enable=YES"
 iocage exec ${JAIL_NAME} sysrc "transmission_conf_dir=/config/transmission-home"
 iocage exec ${JAIL_NAME} sysrc "transmission_download_dir=/mnt/torrents/completed"
-iocage exec ${JAIL_NAME} service ipfw start
-iocage exec ${JAIL_NAME} service openvpn start
+iocage exec "${JAIL_NAME}" 'ifconfig tun create'
 iocage exec ${JAIL_NAME} service transmission start
 
 iocage exec ${JAIL_NAME} service transmission stop
@@ -143,6 +145,8 @@ iocage exec ${JAIL_NAME} chown -R media:media /config /usr/local/etc/rc.d/transm
 iocage exec ${JAIL_NAME} sysrc transmission_user="media"
 iocage exec ${JAIL_NAME} sysrc transmission_group="media"
 
+iocage exec ${JAIL_NAME} service openvpn start
+iocage exec ${JAIL_NAME} service ipfw start
 iocage exec ${JAIL_NAME} service transmission start
 
 
