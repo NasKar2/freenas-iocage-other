@@ -106,6 +106,12 @@ MEDIA_LOCATION="media"
 TORRENTS_LOCATION="torrents"
 ```
 ## Install Transmission in fresh Jail
+
+# Prerequisites
+
+If you are going to going to use the vpn, you will need add a preinit task in the webui to run the following command as well as run it once before you setup the jail. This adds a rule to the default devfs_ruleset applied to all iocage jails to allow them to access tun devices.
+devfs rule -s 4 add path 'tun*' unhide
+
 Will install as user transmission and the script will change it to media
 
 The script will add in this example 192.168.5.* to the rpc-whitelist so transmission can be accessed from your network.
