@@ -16,7 +16,7 @@ VNET="off"
 POOL_PATH=""
 APPS_PATH=""
 UNIFI_DATA=""
-
+USE_BASEJAIL="-b"
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
@@ -25,8 +25,7 @@ CONFIGS_PATH=$SCRIPTPATH/configs
 DB_ROOT_PASSWORD=$(openssl rand -base64 16)
 DB_PASSWORD=$(openssl rand -base64 16)
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-RELEASE="11.3-RELEASE"
-#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
 
 # Check for unifi-config and set configuration
 if ! [ -e $SCRIPTPATH/unifi-config ]; then
@@ -72,7 +71,7 @@ fi
 #echo '{"pkgs":["nano","nginx","php73-xml","php73-hash","php73-gd","php73-curl","php73-tokenizer","php73-zlib","php73-zip","mysql56-server","php73","php73-mysql"]}' > /tmp/pkg.json
 echo '{"pkgs":["nano","bash","llvm40","openjdk8","unifi5"]}' > /tmp/pkg.json
 echo $RELEASE
-if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
 	echo "Failed to create jail"
 	exit 1

@@ -16,6 +16,7 @@ VNET="off"
 POOL_PATH=""
 APPS_PATH=""
 WP_DATA=""
+USE_BASEJAIL="-b"
 
 
 SCRIPT=$(readlink -f "$0")
@@ -28,8 +29,7 @@ if [ -z $DB_PASSWORD  ]; then
 fi
 echo "the DB_PASSWORD ${DB_PASSWORD}"
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-RELEASE="11.3-RELEASE"
-#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
 
 # Check for wp-config and set configuration
 if ! [ -e $SCRIPTPATH/wp-config ]; then
@@ -78,7 +78,7 @@ fi
 
 #php 7.3
 echo '{"pkgs":["nano","rsync","nginx","mariadb102-server","php73","php73-json","php73-mysqli","php73-session","php73-xml","php73-hash","php73-ftp","php73-curl","php73-tokenizer","php73-zlib","php73-zip","php73-filter","php73-gd","php73-openssl"]}' > /tmp/pkg.json
-if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
 	echo "Failed to create jail"
 	exit 1

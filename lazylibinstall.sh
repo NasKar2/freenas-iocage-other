@@ -20,14 +20,13 @@ APPS_PATH=""
 LAZYLIB_DATA=""
 MEDIA_LOCATION=""
 TORRENTS_LOCATION=""
-
+USE_BASEJAIL="-b"
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/lazylib-config
 CONFIGS_PATH=$SCRIPTPATH/configs
-RELEASE="11.3-RELEASE"
-#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
 
 # Check for lazylib-config and set configuration
 if ! [ -e $SCRIPTPATH/lazylib-config ]; then
@@ -78,7 +77,7 @@ fi
 
 #echo '{"pkgs":["nano","unrar","git","wget","","python","py27-sqlite3"]}' > /tmp/pkg.json
 echo '{"pkgs":["nano","git","wget","openssl","readline","pcre","libnghttp2","python36","py36-setuptools","py36-sqlite3","py36-openssl","unrar","ca_root_nss"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 
 rm /tmp/pkg.json
 
