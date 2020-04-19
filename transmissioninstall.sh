@@ -140,7 +140,7 @@ iocage exec ${JAIL_NAME} "pw groupmod media -m transmission"
 iocage exec ${JAIL_NAME} "pw groupmod transmission -m media"
 #iocage exec ${JAIL_NAME} sed -i '' "s/transmission_user=\"transmission\"/transmission_user=\"media\"/" /usr/local/etc/rc.d/transmission
 iocage exec ${JAIL_NAME} sed -i '' "s/transmission_user:=transmission/transmission_user:=media/g" /usr/local/etc/rc.d/transmission
-iocage exec ${JAIL_NAME} chown -R media:media /config /usr/local/etc/rc.d/transmission
+iocage exec ${JAIL_NAME} chown -R media:media /config /usr/local/etc/rc.d/transmission /mnt/torrents
 iocage exec ${JAIL_NAME} sysrc transmission_user="media"
 iocage exec ${JAIL_NAME} sysrc transmission_group="media"
 
