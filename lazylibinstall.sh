@@ -76,7 +76,8 @@ fi
 # Create Jail
 
 #echo '{"pkgs":["nano","unrar","git","wget","","python","py27-sqlite3"]}' > /tmp/pkg.json
-echo '{"pkgs":["nano","git","wget","openssl","readline","pcre","libnghttp2","python36","py36-setuptools","py36-sqlite3","py36-openssl","unrar","ca_root_nss"]}' > /tmp/pkg.json
+#echo '{"pkgs":["nano","git","wget","openssl","readline","pcre","libnghttp2","python36","py36-setuptools","py36-sqlite3","openssl","unrar","ca_root_nss"]}' > /tmp/pkg.json
+echo '{"pkgs":["git","wget","openssl","readline","pcre","libnghttp2","python37","py37-setuptools","py37-sqlite3","py37-openssl","unrar","ca_root_nss"]}' > /tmp/pkg.json
 iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r $RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 
 rm /tmp/pkg.json
@@ -123,7 +124,7 @@ iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media /mnt/media nullfs rw 0 0
 # the above structure is similar to what I use, but it can obviously be adapted
 
 # getting Lazylibrarian:
-iocage exec ${JAIL_NAME} "ln -s /usr/local/bin/python3.6 /usr/local/bin/python"
+iocage exec ${JAIL_NAME} "ln -s /usr/local/bin/python3.7 /usr/local/bin/python"
 iocage exec ${JAIL_NAME} git clone https://gitlab.com/LazyLibrarian/LazyLibrarian.git /usr/local/share/lazylibrarian
 
 # this is requested (don't know why), and cannot install it from FN:
