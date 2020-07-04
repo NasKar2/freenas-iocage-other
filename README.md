@@ -2,7 +2,7 @@
 
 #### https://github.com/NasKar2/freenas-iocage-other.git
 
-Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Unifi, Emby, Wordpress, Jackett, UrBackup, Transmission, Handbrake, LazyLibrarian and Backup/Restore Wordpress
+Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Unifi, Emby, Wordpress, Jackett, UrBackup, Transmission, Handbrake, LazyLibrarian Duplicati and Backup/Restore Wordpress
 
 Unifi etc. will be placed in a jail with separate data directory (/mnt/v1/apps/...) to allow for easy reinstallation/backup.
 
@@ -105,6 +105,21 @@ LAZYLIB_DATA="lazylib"
 MEDIA_LOCATION="media"
 TORRENTS_LOCATION="torrents"
 ```
+Create duplicati-config
+
+```
+JAIL_IP="192.168.5.75"
+DEFAULT_GW_IP="192.168.5.1"
+INTERFACE="vnet0"
+VNET="on"
+JAIL_NAME="duplicati"
+POOL_PATH="/mnt/v1"
+APPS_PATH="apps"
+DUPLICATI_DATA="duplicati"
+BACKUP_LOCATION="backup"
+USE_BASEJAIL="-b"
+DUPLICATI_PW="yourpassword"
+```
 ## Install Transmission in fresh Jail
 
 ### Prerequisites
@@ -192,6 +207,12 @@ cd /urllib3
 python setup.py install
 exit 
 ```
+
+## Install Duplicati
+
+Change "yourpassword" in the duplicati to the password you want to use to login to Duplicati
+
+BACKUP_LOCATION is the externally mounted directory that you need to backup with Duplicai
 
 Other apps can be installed with ./AppNameinstall.sh
 
