@@ -91,8 +91,25 @@ rm /tmp/pkg.json
 #mkdir -p ${PORTS_PATH}/ports
 #mkdir -p ${PORTS_PATH}/db
 
+#
+# Create directories in FreeNAS if they don't exist
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${DUPLICATI_DATA}
-mkdir -p ${POOL_PATH}/${BACKUP_LOCATION}
+if [ ! -d "${POOL_PATH}/${BACKUP_LOCATION}" ]; then
+  mkdir ${POOL_PATH}/${BACKUP_LOCATION}
+fi
+if [ ! -d "${POOL_PATH}/restore" ]; then
+  mkdir ${POOL_PATH}/restore
+fi
+if [ ! -d "${POOL_PATH}/scripts" ]; then
+  mkdir ${POOL_PATH}/scripts
+fi
+if [ ! -d "${POOL_PATH}/nextcloud" ]; then
+  mkdir ${POOL_PATH}/nextcloud
+fi
+if [ ! -d "${POOL_PATH}/apps" ]; then
+  mkdir ${POOL_PATH}/apps
+fi
+
 echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${DUPLICATI_DATA}'"
 
 duplicati_config=${POOL_PATH}/${APPS_PATH}/${DUPLICATI_DATA}
