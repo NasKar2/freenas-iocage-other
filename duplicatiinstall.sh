@@ -105,7 +105,9 @@ iocage exec ${JAIL_NAME} mkdir -p /config
 iocage exec ${JAIL_NAME} mkdir -p /mnt/backup
 iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 iocage exec ${JAIL_NAME} mkdir -p /mnt/restore
-iocage exec ${JAIL_NAME} mkdir -p /mnt/encrypt
+iocage exec ${JAIL_NAME} mkdir -p /mnt/scripts
+iocage exec ${JAIL_NAME} mkdir -p /mnt/nextcloud
+iocage exec ${JAIL_NAME} mkdir -p /mnt/apps
 
 # mount ports so they can be accessed in the jail
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/ports /usr/ports nullfs rw 0 0
@@ -113,6 +115,10 @@ iocage exec ${JAIL_NAME} mkdir -p /mnt/encrypt
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${duplicati_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${BACKUP_LOCATION} /mnt/backup nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/restore /mnt/restore nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/scripts /mnt/scripts nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/nextcloud /mnt/nextcloud nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/apps /mnt/apps nullfs rw 0 0
 
 iocage exec ${JAIL_NAME} "ln -s /usr/local/bin/mono /usr/bin/mono"
 
