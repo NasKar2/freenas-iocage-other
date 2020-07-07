@@ -125,6 +125,7 @@ iocage exec ${JAIL_NAME} mkdir -p /mnt/restore
 iocage exec ${JAIL_NAME} mkdir -p /mnt/scripts
 iocage exec ${JAIL_NAME} mkdir -p /mnt/nextcloud
 iocage exec ${JAIL_NAME} mkdir -p /mnt/apps
+iocage exec ${JAIL_NAME} mkdir -p /mnt/NextcloudBackups
 
 # mount ports so they can be accessed in the jail
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/ports /usr/ports nullfs rw 0 0
@@ -138,6 +139,7 @@ iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/nextcloud /mnt/nextcloud nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/nextcloud/files /mnt/nextcloud/files nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/nextcloud/db /mnt/nextcloud/db nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/apps /mnt/apps nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/NextcloudBackups/ /mnt/NextcloudBackups/ nullfs rw 0 0
 
 iocage exec ${JAIL_NAME} "ln -s /usr/local/bin/mono /usr/bin/mono"
 
@@ -152,6 +154,8 @@ iocage exec ${JAIL_NAME} "unzip /usr/local/share/${FILE} -d /usr/local/share/dup
 #create user and group
 iocage exec ${JAIL_NAME} "pw user add duplicati -c duplicati -u 818 -d /nonexistent -s /usr/bin/nologin"
 iocage exec ${JAIL_NAME} "pw usermod www -G duplicati"
+iocage exec ${JAIL_NAME} "pw user add mysql -c mysql -u 88 -d /nonexistent -s /usr/bin/nologin"
+
 #iocage exec ${JAIL_NAME} "pw groupmod media -m emby"
 
 iocage exec ${JAIL_NAME} chown -R duplicati:duplicati /usr/local/share/duplicati /config /mnt/restore /mnt/encrypt
