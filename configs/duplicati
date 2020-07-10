@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# $FreeBSD$
+#
+# PROVIDE: duplicati
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# duplicati_enable: Set to YES to enable duplicati
+# Default: NO
+# duplicati_user: The user account used to run the duplicati daemon.
+# This is optional, however do not specifically set this to an
+# empty string as this will cause the daemon to run as root.
+# Default: media
+# duplicati_group: The group account used to run the duplicati daemon.
+# This is optional, however do not specifically set this to an
+# empty string as this will cause the daemon to run with group wheel.
+# Default: media
+# duplicati_data_dir: Directory where duplicati configuration
+# data is stored.
+# Default: /var/db/duplicati
+
+. /etc/rc.subr
+name=duplicati
+rcvar=${name}_enable
+load_rc_config $name
+
+: ${duplicati_enable:="NO"}
+: ${duplicati_user:="duplicati"}
+: ${duplicati_group:="duplicati"}
+: ${duplicati_data_dir:="/config"}
+
+command="/usr/sbin/daemon"
+procname="/usr/local/bin/mono"
+command_args="-p ${duplicati_data_dir}/duplicati.pid -f ${procname} /usr/local/share/duplicati/Duplicati.Server.exe --webservice-port=8200 --webservice-interface=any --webservice-password=yourpassword -d ${duplicati_data_dir}"
+
+start_precmd=duplicati_precmd
+duplicati_precmd() {
+export USER=${duplicati_user}
+if [ ! -d ${duplicati_data_dir} ]; then
+install -d -o ${duplicati_user} -g ${duplicati_group} ${duplicati_data_dir}
+fi
+
+export XDG_CONFIG_HOME=${duplicati_data_dir}
+}
+
+run_rc_command "$1"
