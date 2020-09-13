@@ -175,13 +175,15 @@ iocage exec ${JAIL_NAME} cp -f /mnt/configs/FreeBSD.conf /usr/local/etc/pkg/repo
 #
 # Upgrade to the lastest repo
 iocage exec ${JAIL_NAME} pkg upgrade -y
-iocage restart ${JAIL_NAME}
+iocage stop --force ${JAIL_NAME}
+iocage start ${JAIL_NAME}
 
 #
 # remove /mnt/configs as no longer needed
 #iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 
-iocage restart ${JAIL_NAME}
+iocage stop --force ${JAIL_NAME}
+iocage start ${JAIL_NAME}
 echo "DUPLICATI installed"
 echo "Duplicati can be found at http://${JAIL_IP}:8200"
 
