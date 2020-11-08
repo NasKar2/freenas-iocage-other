@@ -4,7 +4,7 @@ ipfw -q -f flush
 
 # Set rules command prefix
 cmd="ipfw -q add"
-vpn="tun0"
+vpn="mytun"
 
 # allow all local traffic on the loopback interface
 $cmd 00001 allow all from any to any via lo0
