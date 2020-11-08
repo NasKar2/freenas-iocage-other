@@ -29,8 +29,8 @@ if [ -z $DB_PASSWORD  ]; then
 fi
 echo "the DB_PASSWORD ${DB_PASSWORD}"
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
-
+#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
+RELEASE="12.2-RELEASE"
 # Check for wp-config and set configuration
 if ! [ -e $SCRIPTPATH/wp-config ]; then
   echo "$SCRIPTPATH/wp-config must exist."
@@ -77,7 +77,23 @@ fi
 #echo '{"pkgs":["nano","rsync","nginx","mariadb102-server","php71","php71-mcrypt","mod_php71","php71-mbstring","php71-curl","php71-zlib","php71-gd","php71-json","php71-mysqli"]}' > /tmp/pkg.json
 
 #php 7.3
-echo '{"pkgs":["nano","rsync","nginx","mariadb103-server","php73","php73-json","php73-mysqli","php73-session","php73-xml","php73-hash","php73-ftp","php73-curl","php73-tokenizer","php73-zlib","php73-zip","php73-filter","php73-gd","php73-openssl"]}' > /tmp/pkg.json
+#echo '{"pkgs":["nano","rsync","nginx","mariadb105-server","php73","php73-json","php73-mysqli","php73-session","php73-xml","php73-hash","php73-ftp","php73-curl","php73-tokenizer","php73-zlib","php73-zip","php73-filter","php73-gd","php73-openssl"]}' > /tmp/pkg.json
+
+# php 7.4
+cat <<__EOF__ >/tmp/pkg.json
+	{
+  "pkgs":[
+  "php74","php74-curl","php74-dom","php74-exif","php74-fileinfo","php74-json","php74-mbstring",
+  "php74-mysqli","php74-pecl-libsodium","php74-openssl","php74-pecl-imagick","php74-xml","php74-zip",
+  "php74-filter","php74-gd","php74-iconv","php74-pecl-mcrypt","php74-simplexml","php74-xmlreader","php74-zlib",
+  "php74-ftp","php74-pecl-ssh2","php74-sockets",
+  "mariadb103-server","unix2dos","ssmtp","phpmyadmin5-php74",
+  "php74-xmlrpc","php74-ctype","php74-session","php74-xmlwriter",
+  "redis","php74-pecl-redis","nano","nginx"
+  ]
+}
+__EOF__
+
 if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
 	echo "Failed to create jail"
@@ -115,6 +131,11 @@ iocage exec ${JAIL_NAME} service php-fpm restart
 service nginx restart
 #iocage exec ${JAIL_NAME} echo "<?php phpinfo(); ?>" | tee /config/phpinfo.php
 iocage exec ${JAIL_NAME} cp /mnt/configs/php-fpm.conf /usr/local/etc/php-fpm.conf
+
+#
+# MariaDB 10.4 requirement
+iocage exec "${JAIL_NAME}" sed -i '' "s|mysqli.default_socket =|mysqli.default_socket = /var/run/mysql/mysql.sock|" /usr/local/etc/php.ini
+
 
 #
 # start nginx and copy nginx.conf with jail IP adddress
