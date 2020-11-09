@@ -129,9 +129,9 @@ iocage exec ${JAIL_NAME} sysrc "openvpn_configfile=/config/openvpn.conf"
 iocage exec ${JAIL_NAME} sysrc "transmission_enable=YES"
 iocage exec ${JAIL_NAME} sysrc "transmission_conf_dir=/config/transmission-home"
 iocage exec ${JAIL_NAME} sysrc "transmission_download_dir=/mnt/torrents/completed"
-iocage exec ${JAIL_NAME} 'ifconfig tun create'
-iocage exec ${JAIL_NAME} TUN_NUM=$(iocage exec ${JAIL_NAME} ifconfig | grep tun | cut -d : -f1 | grep tun)
-echo "TUN_NUM is ${TUN_NUM}"
+#iocage exec ${JAIL_NAME} 'ifconfig tun create'
+#TUN_NUM=$(iocage exec ${JAIL_NAME} ifconfig | grep tun | cut -d : -f1 | grep tun)
+#echo "TUN_NUM is ${TUN_NUM}"
 iocage exec ${JAIL_NAME} service transmission start
 
 iocage exec ${JAIL_NAME} service transmission stop
@@ -148,7 +148,11 @@ iocage exec ${JAIL_NAME} sed -i '' "s/transmission_user:=transmission/transmissi
 iocage exec ${JAIL_NAME} chown -R media:media /config /usr/local/etc/rc.d/transmission /mnt/torrents
 iocage exec ${JAIL_NAME} sysrc transmission_user="media"
 iocage exec ${JAIL_NAME} sysrc transmission_group="media"
+iocage exec ${JAIL_NAME} 'ifconfig tun create'
+TUN_NUM=$(iocage exec ${JAIL_NAME} ifconfig | grep tun | cut -d : -f1 | grep tun)
+echo "TUN_NUM is ${TUN_NUM}"
 iocage exec ${JAIL_NAME} sed -i '' "s|mytun|${TUN_NUM}|" /config/ipfw_rules
+iocage exec ${JAIL_NAME} sed -i '' "s|dev\ tun|dev\ ${TUN_NUM}|" /config/openvpn.conf
 iocage exec ${JAIL_NAME} service openvpn start
 iocage exec ${JAIL_NAME} service ipfw start
 iocage exec ${JAIL_NAME} service transmission start
