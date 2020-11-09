@@ -136,6 +136,13 @@ The script will add in this example 192.168.5.* to the rpc-whitelist so transmis
 If your changes more that just the last octet: After stopping the service transmission you will have to manually edit the setting.json file in the config folder.
 
 Create transmission-config.
+
+Minimal config file. Other parameters set to defaults.
+```
+JAIL_IP="192.168.5.76"
+DEFAULT_GW_IP="192.168.5.1"
+```
+Full config file
 ```
 JAIL_IP="192.168.5.76"
 DEFAULT_GW_IP="192.168.5.1"
