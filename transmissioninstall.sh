@@ -12,8 +12,8 @@ fi
 JAIL_IP=""
 DEFAULT_GW_IP=""
 INTERFACE=""
-VNET="off"
-JAIL_NAME="transmision"
+VNET=""
+JAIL_NAME=""
 POOL_PATH=""
 APPS_PATH=""
 TRANSMISSION_DATA=""
@@ -27,7 +27,7 @@ CONFIGS_PATH=$SCRIPTPATH/configs
 DB_ROOT_PASSWORD=$(openssl rand -base64 16)
 DB_PASSWORD=$(openssl rand -base64 16)
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
+RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
 # Check for transmission-config and set configuration
 if ! [ -e $SCRIPTPATH/transmission-config ]; then
@@ -45,32 +45,35 @@ if [ -z $DEFAULT_GW_IP ]; then
   exit 1
 fi
 if [ -z $INTERFACE ]; then
-  echo 'Configuration error: INTERFACE must be set'
-  exit 1
+  INTERFACE="vnet0"
+  echo "INTERFACE defaulting to 'vnet0'"
 fi
-if [ -z $POOL_PATH ]; then
-  echo 'Configuration error: POOL_PATH must be set'
-  exit 1
+if [ -z $VNET ]; then
+  VNET="on"
+  echo "VNET defaulting to 'on'"
 fi
 
+if [ -z $POOL_PATH ]; then
+  POOL_PATH="/mnt/$(iocage get -p)"
+  echo "POOL_PATH defaulting to "$POOL_PATH
+fi
 if [ -z $APPS_PATH ]; then
-  echo 'Configuration error: APPS_PATH must be set'
-  exit 1
+  APPS_PATH="apps"
+  echo "APPS_PATH defaulting to 'apps'"
 fi
 
 if [ -z $JAIL_NAME ]; then
-  echo 'Configuration error: JAIL_NAME must be set'
-  exit 1
+  JAIL_NAME="transmission"
+  echo "JAIL_NAME defaulting to 'transmission'"
 fi
-
 if [ -z $TRANSMISSION_DATA ]; then
-  echo 'Configuration error: TRANSMISSION_DATA must be set'
-  exit 1
+  TRANSMISSION_DATA="transmission"
+  echo "TRANSMISSION_DATA defaulting to 'transmission'"
 fi
 
 if [ -z $TORRENTS_LOCATION ]; then
-  echo 'Configuration error: TORRENTS_LOCATION must be set'
-  exit 1
+  TORRENTS_LOCATION="torrents"
+  echo "TORRENTS_LOCATION defaulting to 'torrents'"
 fi
 
 #
@@ -106,9 +109,9 @@ iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nul
 
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
-iocage exec "${JAIL_NAME}" mkdir -p /config/transmission-home
-iocage exec "${JAIL_NAME}" chown -R transmission:transmission /config /mnt/torrents
-#iocage exec "${JAIL_NAME}" 'ifconfig tun create'
+iocage exec ${JAIL_NAME} mkdir -p /config/transmission-home
+iocage exec ${JAIL_NAME} chown -R transmission:transmission /config /mnt/torrents
+#iocage exec ${JAIL_NAME} 'ifconfig tun create'
 # ipfw_rules
 iocage exec ${JAIL_NAME} cp -f /mnt/configs/ipfw_rules /config/ipfw_rules
 
@@ -126,7 +129,9 @@ iocage exec ${JAIL_NAME} sysrc "openvpn_configfile=/config/openvpn.conf"
 iocage exec ${JAIL_NAME} sysrc "transmission_enable=YES"
 iocage exec ${JAIL_NAME} sysrc "transmission_conf_dir=/config/transmission-home"
 iocage exec ${JAIL_NAME} sysrc "transmission_download_dir=/mnt/torrents/completed"
-iocage exec "${JAIL_NAME}" 'ifconfig tun create'
+#iocage exec ${JAIL_NAME} 'ifconfig tun create'
+#TUN_NUM=$(iocage exec ${JAIL_NAME} ifconfig | grep tun | cut -d : -f1 | grep tun)
+#echo "TUN_NUM is ${TUN_NUM}"
 iocage exec ${JAIL_NAME} service transmission start
 
 iocage exec ${JAIL_NAME} service transmission stop
@@ -143,7 +148,11 @@ iocage exec ${JAIL_NAME} sed -i '' "s/transmission_user:=transmission/transmissi
 iocage exec ${JAIL_NAME} chown -R media:media /config /usr/local/etc/rc.d/transmission /mnt/torrents
 iocage exec ${JAIL_NAME} sysrc transmission_user="media"
 iocage exec ${JAIL_NAME} sysrc transmission_group="media"
-
+iocage exec ${JAIL_NAME} 'ifconfig tun create'
+TUN_NUM=$(iocage exec ${JAIL_NAME} ifconfig | grep tun | cut -d : -f1 | grep tun)
+echo "TUN_NUM is ${TUN_NUM}"
+iocage exec ${JAIL_NAME} sed -i '' "s|mytun|${TUN_NUM}|" /config/ipfw_rules
+iocage exec ${JAIL_NAME} sed -i '' "s|dev\ tun|dev\ ${TUN_NUM}|" /config/openvpn.conf
 iocage exec ${JAIL_NAME} service openvpn start
 iocage exec ${JAIL_NAME} service ipfw start
 iocage exec ${JAIL_NAME} service transmission start
