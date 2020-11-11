@@ -136,7 +136,7 @@ iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw
 #iocage exec ${JAIL_NAME} chown -R media:media /usr/local/share/emby /config
 iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
 iocage exec ${JAIL_NAME} "pw groupmod media -m emby"
-iocage exec ${JAIL_NAME} chown -R emby:emby /usr/local/share/emby /config
+iocage exec ${JAIL_NAME} "chown -R emby:emby /usr/local/share/emby /config"
 
 
 #iocage exec ${JAIL_NAME} -- mkdir /usr/local/etc/rc.d

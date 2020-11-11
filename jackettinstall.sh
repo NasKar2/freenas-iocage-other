@@ -12,7 +12,7 @@ fi
 JAIL_IP=""
 DEFAULT_GW_IP=""
 INTERFACE=""
-VNET="off"
+VNET=""
 POOL_PATH=""
 APPS_PATH=""
 JACKETT_DATA=""
@@ -26,7 +26,7 @@ CONFIGS_PATH=$SCRIPTPATH/configs
 DB_ROOT_PASSWORD=$(openssl rand -base64 16)
 DB_PASSWORD=$(openssl rand -base64 16)
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
+RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
 # Check for jackett-config and set configuration
 if ! [ -e $SCRIPTPATH/jackett-config ]; then
@@ -44,27 +44,30 @@ if [ -z $DEFAULT_GW_IP ]; then
   exit 1
 fi
 if [ -z $INTERFACE ]; then
-  echo 'Configuration error: INTERFACE must be set'
-  exit 1
+  INTERFACE="vnet0"
+  echo "INTERFACE defaulting to 'vnet0'"
 fi
-if [ -z $POOL_PATH ]; then
-  echo 'Configuration error: POOL_PATH must be set'
-  exit 1
+if [ -z $VNET ]; then
+  VNET="on"
+  echo "VNET defaulting to 'on'"
 fi
 
+if [ -z $POOL_PATH ]; then
+  POOL_PATH="/mnt/$(iocage get -p)"
+  echo "POOL_PATH defaulting to "$POOL_PATH
+fi
 if [ -z $APPS_PATH ]; then
-  echo 'Configuration error: APPS_PATH must be set'
-  exit 1
+  APPS_PATH="apps"
+  echo "APPS_PATH defaulting to 'apps'"
 fi
 
 if [ -z $JAIL_NAME ]; then
-  echo 'Configuration error: JAIL_NAME must be set'
-  exit 1
+  JAIL_NAME="jackett"
+  echo "JAIL_NAME defaulting to 'jackett'"
 fi
-
 if [ -z $JACKETT_DATA ]; then
-  echo 'Configuration error: JACKETT_DATA must be set'
-  exit 1
+  JACKETT_DATA="jackett"
+  echo "JACKETT_DATA defaulting to 'jackett'"
 fi
 
 #
