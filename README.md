@@ -15,12 +15,21 @@ Edit file unifi-config
 
 Edit unifi-config file with the name of your jail, your network information and directory data name you want to use and location of your media files and torrents.
 
+Can use Minimum config for all apps and defaults will be used.
+
 UNIFI_DATA= will create a data directory /mnt/v1/apps/unifi to store all the data for that app.
 
 MEDIA_LOCATION will set the location of your media files, in this example /mnt/v1/media
 
-
+Minimal config
 ```
+JAIL_IP="192.168.5.239"
+DEFAULT_GW_IP="192.168.5.1"
+```
+
+Maximum config
+```http://192.168.5.248:55414
+
 JAIL_IP="192.168.5.239"
 DEFAULT_GW_IP="192.168.5.1"
 INTERFACE="igb0"
@@ -34,6 +43,13 @@ MEDIA_LOCATION="media"
 
 Likewise create config files for the other apps - emby-config, jackett-config urbackup-config, handbrake-config and replace JAIL_IP, JAIL_NAME, and JAIL_DATA with the name of the application. For example see below for emby.
 
+Minimal config
+```
+JAIL_IP="192.168.5.238"
+DEFAULT_GW_IP="192.168.5.1"
+```
+
+Maximum config
 ```
 JAIL_IP="192.168.5.238"
 DEFAULT_GW_IP="192.168.5.1"
