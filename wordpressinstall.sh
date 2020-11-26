@@ -185,7 +185,8 @@ iocage exec ${JAIL_NAME} sed -i '' "s|mypassword|${DB_PASSWORD}|" /root/.my.cnf
 
 
 touch /root/wpdatabase.txt
-echo ${DB_ROOT_PASSWORD} >> wpdatabase.txt
+echo "DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}" > /root/wp_db_password.txt
+echo "DB_PASSWORD=${DB_PASSWORD}" >> /root/wp_db_password.txt
 
 iocage exec ${JAIL_NAME} service php-fpm restart
 
