@@ -172,8 +172,8 @@ iocage exec ${JAIL_NAME} service nginx restart
 
 # Secure database, set root password, create wordpress DB, user, and password
 echo "Secure database"
-iocage exec ${JAIL_NAME} mysql -u root -e "CREATE DATABASE ${JAIL_NAME};"
-iocage exec ${JAIL_NAME} mysql -u root -e "GRANT ALL ON ${JAIL_NAME}.* TO ${JAIL_NAME}@localhost IDENTIFIED BY '${DB_PASSWORD}';"
+iocage exec ${JAIL_NAME} mysql -u root -e "CREATE DATABASE wordpress;"
+iocage exec ${JAIL_NAME} mysql -u root -e "GRANT ALL ON wordpress.* TO wordpress@localhost IDENTIFIED BY '${DB_PASSWORD}';"
 iocage exec ${JAIL_NAME} mysql -u root -e "DELETE FROM mysql.user WHERE User='';"
 iocage exec ${JAIL_NAME} mysql -u root -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
 iocage exec ${JAIL_NAME} mysql -u root -e "DROP DATABASE IF EXISTS test;"
@@ -183,10 +183,9 @@ iocage exec ${JAIL_NAME} mysqladmin reload
 iocage exec ${JAIL_NAME} cp -f /mnt/configs/my.cnf /root/.my.cnf
 iocage exec ${JAIL_NAME} sed -i '' "s|mypassword|${DB_PASSWORD}|" /root/.my.cnf
 
-
-touch /root/wpdatabase.txt
-echo "DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}" > /root/wp_db_password.txt
-echo "DB_PASSWORD=${DB_PASSWORD}" >> /root/wp_db_password.txt
+touch /root/${JAIL_NAME}.txt
+echo "DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}" > /root/${JAIL_NAME}_db_password.txt
+echo "DB_PASSWORD=${DB_PASSWORD}" >> /root/${JAIL_NAME}_db_password.txt
 
 iocage exec ${JAIL_NAME} service php-fpm restart
 
