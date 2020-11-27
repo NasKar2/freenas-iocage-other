@@ -29,8 +29,8 @@ if [ -z $DB_PASSWORD  ]; then
 fi
 echo "the DB_PASSWORD ${DB_PASSWORD}"
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
-RELEASE="12.2-RELEASE"
+RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
+
 # Check for wp-config and set configuration
 if ! [ -e $SCRIPTPATH/wp-config ]; then
   echo "$SCRIPTPATH/wp-config must exist."
@@ -197,8 +197,8 @@ iocage exec ${JAIL_NAME} tar xzvf latest.tar.gz
 iocage exec ${JAIL_NAME} rm latest.tar.gz
 #iocage exec ${JAIL_NAME} cd /wordpress
 iocage exec ${JAIL_NAME} cp /wordpress/wp-config-sample.php /wordpress/wp-config.php
-iocage exec ${JAIL_NAME} sed -i '' "s/database_name_here/${JAIL_NAME}/" /wordpress/wp-config.php
-iocage exec ${JAIL_NAME} sed -i '' "s/username_here/${JAIL_NAME}/" /wordpress/wp-config.php
+iocage exec ${JAIL_NAME} sed -i '' "s/database_name_here/wordpress/" /wordpress/wp-config.php
+iocage exec ${JAIL_NAME} sed -i '' "s/username_here/wordpress/" /wordpress/wp-config.php
 iocage exec ${JAIL_NAME} sed -i '' "s/password_here/${DB_PASSWORD}/" /wordpress/wp-config.php
 iocage exec ${JAIL_NAME} rsync -avP -q /wordpress/ /config
 #iocage exec ${JAIL_NAME} rm -r /wordpress
