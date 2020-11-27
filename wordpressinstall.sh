@@ -179,13 +179,14 @@ iocage exec ${JAIL_NAME} mysql -u root -e "DELETE FROM mysql.user WHERE User='ro
 iocage exec ${JAIL_NAME} mysql -u root -e "DROP DATABASE IF EXISTS test;"
 iocage exec ${JAIL_NAME} mysql -u root -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
 iocage exec ${JAIL_NAME} mysql -u root -e "UPDATE mysql.user SET Password=PASSWORD('${DB_PASSWORD}') WHERE User='root';"
-iocage exec ${JAIL_NAME} mysqladmin reload
+iocage exec "${JAIL_NAME}" mysqladmin --user=root password "${DB_ROOT_PASSWORD}" reload
+#iocage exec ${JAIL_NAME} mysqladmin reload
 iocage exec ${JAIL_NAME} cp -f /mnt/configs/my.cnf /root/.my.cnf
 iocage exec ${JAIL_NAME} sed -i '' "s|mypassword|${DB_PASSWORD}|" /root/.my.cnf
 
 touch /root/${JAIL_NAME}.txt
-echo "DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}" > /root/${JAIL_NAME}_db_password.txt
-echo "DB_PASSWORD=${DB_PASSWORD}" >> /root/${JAIL_NAME}_db_password.txt
+echo 'DB_PASSWORD="'${DB_PASSWORD}'" # user=wordpress' > /root/${JAIL_NAME}_db_password.txt
+echo 'DB_ROOT_PASSWORD="'${DB_ROOT_PASSWORD}'" >> /root/${JAIL_NAME}_db_password.txt
 
 iocage exec ${JAIL_NAME} service php-fpm restart
 
