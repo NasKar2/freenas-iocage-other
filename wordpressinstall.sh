@@ -28,7 +28,8 @@ if [ -z $DB_PASSWORD  ]; then
    DB_PASSWORD=$(openssl rand -hex 10)
 fi
 echo "the DB_PASSWORD ${DB_PASSWORD}"
-ADMIN_PASSWORD=$(openssl rand -base64 12)
+DB_ROOT_PASSWORD=$(openssl rand -base64 12)
+echo "DB_ROOT_PASSWORD is ${DB_ROOT_PASSWORD}"
 RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
 # Check for wp-config and set configuration
@@ -134,7 +135,7 @@ iocage exec ${JAIL_NAME} cp /mnt/configs/php-fpm.conf /usr/local/etc/php-fpm.con
 
 #
 # MariaDB 10.4 requirement
-iocage exec "${JAIL_NAME}" sed -i '' "s|mysqli.default_socket =|mysqli.default_socket = /var/run/mysql/mysql.sock|" /usr/local/etc/php.ini
+#iocage exec "${JAIL_NAME}" sed -i '' "s|mysqli.default_socket =|mysqli.default_socket = /var/run/mysql/mysql.sock|" /usr/local/etc/php.ini
 
 
 #
@@ -171,6 +172,8 @@ iocage exec ${JAIL_NAME} service nginx restart
 #iocage exec ${JAIL_NAME} cp /mnt/configs/php-fpm.conf /usr/local/etc/php-fpm.conf
 
 # Secure database, set root password, create wordpress DB, user, and password
+#DB_VERSION="$(iocage exec ${JAIL_NAME} "mysql -V | cut -d ' ' -f 6  | cut -d . -f -2")"
+#DB_VERSION="${DB_VERSION//.}"
 echo "Secure database"
 iocage exec ${JAIL_NAME} mysql -u root -e "CREATE DATABASE wordpress;"
 iocage exec ${JAIL_NAME} mysql -u root -e "GRANT ALL ON wordpress.* TO wordpress@localhost IDENTIFIED BY '${DB_PASSWORD}';"
@@ -184,9 +187,9 @@ iocage exec "${JAIL_NAME}" mysqladmin --user=root password "${DB_ROOT_PASSWORD}"
 iocage exec ${JAIL_NAME} cp -f /mnt/configs/my.cnf /root/.my.cnf
 iocage exec ${JAIL_NAME} sed -i '' "s|mypassword|${DB_PASSWORD}|" /root/.my.cnf
 
-touch /root/${JAIL_NAME}.txt
+# Save Passwords for later use
 echo 'DB_PASSWORD="'${DB_PASSWORD}'" # user=wordpress' > /root/${JAIL_NAME}_db_password.txt
-echo 'DB_ROOT_PASSWORD="'${DB_ROOT_PASSWORD}'" >> /root/${JAIL_NAME}_db_password.txt
+echo 'DB_ROOT_PASSWORD="'${DB_ROOT_PASSWORD}'"' >> /root/${JAIL_NAME}_db_password.txt
 
 iocage exec ${JAIL_NAME} service php-fpm restart
 
