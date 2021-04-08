@@ -25,8 +25,7 @@ CONFIGS_PATH=$SCRIPTPATH/configs
 DB_ROOT_PASSWORD=$(openssl rand -base64 16)
 DB_PASSWORD=$(openssl rand -base64 16)
 ADMIN_PASSWORD=$(openssl rand -base64 12)
-RELEASE="11.3-RELEASE"
-#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
+RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
 # Check for handbrake-config and set configuration
 if ! [ -e $SCRIPTPATH/handbrake-config ]; then
