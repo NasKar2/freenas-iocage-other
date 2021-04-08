@@ -141,6 +141,7 @@ iocage exec ${JAIL_NAME} mkdir -p /mnt/scripts
 iocage exec ${JAIL_NAME} mkdir -p /mnt/nextcloud
 iocage exec ${JAIL_NAME} mkdir -p /mnt/apps
 iocage exec ${JAIL_NAME} mkdir -p /mnt/NextcloudBackups
+iocage exec ${JAIL_NAME} mkdir -p /mnt/media/videos/homevideos
 
 # mount ports so they can be accessed in the jail
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/ports /usr/ports nullfs rw 0 0
@@ -155,6 +156,7 @@ iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/nextcloud/files /mnt/nextcloud/files n
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/nextcloud/db /mnt/nextcloud/db nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/apps /mnt/apps nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/NextcloudBackups/ /mnt/NextcloudBackups/ nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/media/videos/homevideos/ /mnt/media/videos/homevideos/ nullfs rw 0 0
 
 iocage exec ${JAIL_NAME} "ln -s /usr/local/bin/mono /usr/bin/mono"
 
