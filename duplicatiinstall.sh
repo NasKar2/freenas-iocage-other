@@ -136,6 +136,7 @@ iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 iocage exec ${JAIL_NAME} mkdir -p /config
 iocage exec ${JAIL_NAME} mkdir -p /mnt/backup
 iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
+iocage exec ${JAIL_NAME} mkdir -p /mnt/encrypt
 iocage exec ${JAIL_NAME} mkdir -p /mnt/restore
 iocage exec ${JAIL_NAME} mkdir -p /mnt/scripts
 iocage exec ${JAIL_NAME} mkdir -p /mnt/nextcloud
@@ -167,18 +168,22 @@ iocage exec ${JAIL_NAME} "unzip /usr/local/share/${FILE} -d /usr/local/share/dup
 #iocage exec ${JAIL_NAME} 'rm /usr/local/share/"${FILE}"'
 
 #create user and group
-iocage exec ${JAIL_NAME} "pw user add duplicati -c duplicati -u 818 -d /nonexistent -s /usr/bin/nologin"
-iocage exec ${JAIL_NAME} "pw usermod www -G duplicati"
+#iocage exec ${JAIL_NAME} "pw user add duplicati -c duplicati -u 818 -d /nonexistent -s /usr/bin/nologin"
+#iocage exec ${JAIL_NAME} "pw usermod www -G duplicati"
 iocage exec ${JAIL_NAME} "pw user add mysql -c mysql -u 88 -d /nonexistent -s /usr/bin/nologin"
+iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
+iocage exec ${JAIL_NAME} "pw groupmod wheel -m media"
 
-#iocage exec ${JAIL_NAME} "pw groupmod media -m emby"
 
-iocage exec ${JAIL_NAME} chown -R duplicati:duplicati /usr/local/share/duplicati /config /mnt/restore /mnt/encrypt
+iocage exec ${JAIL_NAME} chown -R media:media /usr/local/share/duplicati /config /mnt/restore /mnt/encrypt
 iocage exec ${JAIL_NAME} mkdir -p /usr/local/etc/rc.d
 iocage exec ${JAIL_NAME} cp -f /mnt/configs/duplicati /usr/local/etc/rc.d/
 iocage exec ${JAIL_NAME} chmod u+x /usr/local/etc/rc.d/duplicati
 iocage exec ${JAIL_NAME} sed -i '' "s/yourpassword/${DUPLICATI_PW}/" /usr/local/etc/rc.d/duplicati
+iocage exec ${JAIL_NAME} sed -i '' 's/"duplicati"/"media"/' /usr/local/etc/rc.d/duplicati
 iocage exec ${JAIL_NAME} sysrc duplicati_enable="YES"
+iocage exec ${JAIL_NAME} sysrc duplicati_user="media"
+iocage exec ${JAIL_NAME} sysrc duplicati_group="media"
 iocage exec ${JAIL_NAME} sysrc duplicati_dat_dir="/config"
 iocage exec ${JAIL_NAME} service duplicati restart
 
