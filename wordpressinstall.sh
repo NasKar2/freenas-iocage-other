@@ -111,13 +111,13 @@ iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 # create dir in jail for mount points
 iocage exec ${JAIL_NAME} mkdir -p /usr/ports
 iocage exec ${JAIL_NAME} mkdir -p /var/db/portsnap
-iocage exec ${JAIL_NAME} mkdir -p /config
+iocage exec ${JAIL_NAME} mkdir -p /usr/local/www/wordpress
 iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 
 #
 # mount ports so they can be accessed in the jail
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} ${wp_config} /config nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${wp_config} /usr/local/www/wordpress nullfs rw 0 0
 iocage restart ${JAIL_NAME}
   
 iocage exec ${JAIL_NAME} sysrc mysql_enable="YES"
@@ -204,9 +204,9 @@ iocage exec ${JAIL_NAME} cp /wordpress/wp-config-sample.php /wordpress/wp-config
 iocage exec ${JAIL_NAME} sed -i '' "s/database_name_here/wordpress/" /wordpress/wp-config.php
 iocage exec ${JAIL_NAME} sed -i '' "s/username_here/wordpress/" /wordpress/wp-config.php
 iocage exec ${JAIL_NAME} sed -i '' "s/password_here/${DB_PASSWORD}/" /wordpress/wp-config.php
-iocage exec ${JAIL_NAME} rsync -avP -q /wordpress/ /config
+iocage exec ${JAIL_NAME} rsync -avP -q /wordpress/ /usr/local/www/wordpress
 #iocage exec ${JAIL_NAME} rm -r /wordpress
-iocage exec ${JAIL_NAME} chown -R www:www /config
+iocage exec ${JAIL_NAME} chown -R www:www /usr/local/www/wordpress
 #iocage exec ${JAIL_NAME} sed -i '' "s/password_here/try_files $uri $uri/ /index.php?q=$uri&$args;/" /usr/local/etc/nginx/nginx.conf
 
 echo "Wordpress installed"
