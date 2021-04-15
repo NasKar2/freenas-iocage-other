@@ -76,6 +76,8 @@ JAIL_NAME="wordpress"
 WP_DATA="wordpress"
 DB_PASSWORD="yourdatabasepassword"
 ```
+Will Store in jail at /usr/local/www/wordpress
+
 
 Create WordpressBackup-config. Can backup wordpress files and wordpress database to /mnt/v1/backup/wpbackup.tar.gz.  Restore will replace all the wordpress files and restore the database.  If cron="yes" then it will default to backup to allow it to be called by a cronjob.
 
