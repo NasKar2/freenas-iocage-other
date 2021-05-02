@@ -205,7 +205,7 @@ iocage exec ${JAIL_NAME} sed -i '' "s/database_name_here/wordpress/" /wordpress/
 iocage exec ${JAIL_NAME} sed -i '' "s/username_here/wordpress/" /wordpress/wp-config.php
 iocage exec ${JAIL_NAME} sed -i '' "s/password_here/${DB_PASSWORD}/" /wordpress/wp-config.php
 iocage exec ${JAIL_NAME} rsync -avP -q /wordpress/ /config
-#iocage exec ${JAIL_NAME} rm -r /wordpress
+iocage exec ${JAIL_NAME} rm -rf /wordpress
 iocage exec ${JAIL_NAME} chown -R www:www /config
 #iocage exec ${JAIL_NAME} sed -i '' "s/password_here/try_files $uri $uri/ /index.php?q=$uri&$args;/" /usr/local/etc/nginx/nginx.conf
 
