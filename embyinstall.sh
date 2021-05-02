@@ -28,7 +28,7 @@ DB_ROOT_PASSWORD=$(openssl rand -base64 16)
 DB_PASSWORD=$(openssl rand -base64 16)
 ADMIN_PASSWORD=$(openssl rand -base64 12)
 RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
-
+echo "RELEASE=${RELEASE}"
 # Check for emby-config and set configuration
 if ! [ -e $SCRIPTPATH/emby-config ]; then
   echo "$SCRIPTPATH/emby-config must exist."
