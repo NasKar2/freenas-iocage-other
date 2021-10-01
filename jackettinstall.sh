@@ -73,7 +73,7 @@ fi
 #
 # Create Jail
 
-echo '{"pkgs":["nano","mono","curl","ca_root_nss"]}' > /tmp/pkg.json
+echo '{"pkgs":["nano","mono6.8","curl","ca_root_nss"]}' > /tmp/pkg.json
 if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
 	echo "Failed to create jail"
@@ -83,6 +83,16 @@ rm /tmp/pkg.json
 
 iocage exec ${JAIL_NAME} sysrc jackett_enable="YES"
 iocage exec ${JAIL_NAME} service jackett start
+
+#
+# update mono to 6.8.0.105
+#iocage exec ${JAIL_NAME} cd /tmp
+#iocage exec ${JAIL_NAME} pkg install -y libiconv
+#iocage exec ${JAIL_NAME} fetch https://github.com/jailmanager/jailmanager.github.io/releases/download/v0.0.1/mono-6.8.0.105.txz
+#iocage exec ${JAIL_NAME} cp /mnt/configs/mono-6.8.0.105.txz /tmp/mono-6.8.0.105.txz
+#iocage exec ${JAIL_NAME} pkg install -y /tmp/mono-6.8.0.105.txz
+#iocage exec ${JAIL_NAME} rm /tmp/mono-6.8.0.105.txz
+
 
 #exit
 #
@@ -111,7 +121,8 @@ iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${jackett_config} /config nullfs rw 0 0
 
 iocage exec ${JAIL_NAME} ln -s /usr/local/bin/mono /usr/bin/mono
-iocage exec ${JAIL_NAME} "fetch https://github.com/Jackett/Jackett/releases/download/v0.9.16/Jackett.Binaries.Mono.tar.gz -o /usr/local/share"
+iocage exec ${JAIL_NAME} "fetch https://github.com/Jackett/Jackett/releases/download/v0.18.875/Jackett.Binaries.Mono.tar.gz -o /usr/local/share"
+#iocage exec ${JAIL_NAME} "fetch https://github.com/Jackett/Jackett/releases/download/v0.9.16/Jackett.Binaries.Mono.tar.gz -o /usr/local/share"
 iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/Jackett.Binaries.Mono.tar.gz -C /usr/local/share"
 iocage exec ${JAIL_NAME} rm /usr/local/share/Jackett.Binaries.Mono.tar.gz
 iocage exec ${JAIL_NAME} "pw user add jackett -c jackett -u 818 -d /nonexistent -s /usr/bin/nologin"

@@ -14,6 +14,7 @@ DEFAULT_GW_IP=""
 INTERFACE=""
 VNET=""
 POOL_PATH=""
+DPOOL_PATH="/mnt/z1"
 APPS_PATH=""
 URBACKUP_DATA=""
 USE_BASEJAIL="-b"
@@ -86,10 +87,12 @@ rm /tmp/pkg.json
 #mkdir -p ${PORTS_PATH}/ports
 #mkdir -p ${PORTS_PATH}/db
 
-mkdir -p ${POOL_PATH}/${APPS_PATH}/${URBACKUP_DATA}
+mkdir -p ${DPOOL_PATH}/${APPS_PATH}/${URBACKUP_DATA}
+#mkdir -p ${POOL_PATH}/${APPS_PATH}/${URBACKUP_DATA}
 echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${URBACKUP_DATA}'"
 
-urbackup_config=${POOL_PATH}/${APPS_PATH}/${URBACKUP_DATA}
+urbackup_config=${DPOOL_PATH}/${APPS_PATH}/${URBACKUP_DATA}
+#urbackup_config=${POOL_PATH}/${APPS_PATH}/${URBACKUP_DATA}
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
 # create dir in jail for mount points
