@@ -172,5 +172,5 @@ chown -R media:media ${POOL_PATH}/${TORRENTS_LOCATION}
 
 echo
 
-echo "Emby should be available at http://${JAIL_IP}:"
+echo "Emby should be available at http://${JAIL_IP}:8096"
 
