@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# $FreeBSD$
+#
+# PROVIDE: prowlarr
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+#
+# Add the following lines to /etc/rc.conf to enable prowlarr:
+# ${prowlarr_enable="YES"}
+# Optionaly there are some other parameters
+# ${prowlarr_user="prowlarr"}
+# ${prowlarr_group="prowlarr"}
+# ${prowlarr_data_dir="/usr/local/data/prowlarr"}
+#
+
+. /etc/rc.subr
+name=prowlarr
+rcvar=prowlarr_enable
+load_rc_config $name
+
+: ${prowlarr_enable:=NO}
+: ${prowlarr_user:="prowlarr"}
+: ${prowlarr_group:="prowlarr"}
+: ${prowlarr_exec_dir:="/usr/local/prowlarr"}
+: ${prowlarr_data_dir:="/usr/local/data/prowlarr/"}
+
+pidfile="${prowlarr_data_dir}/${name}_daemon.pid"
+pidfile_child="${prowlarr_data_dir}/${name}_child.pid"
+command="/usr/sbin/daemon"
+
+
+start_precmd=${name}_precmd
+prowlarr_precmd() {
+    if [ ! -d ${prowlarr_data_dir} ]; then
+    install -d -o ${prowlarr_user} -g ${prowlarr_group} ${prowlarr_data_dir}
+    fi
+
+    chown -R ${prowlarr_user}:${prowlarr_group} ${prowlarr_exec_dir}
+
+    rc_flags="-r -f -p ${pidfile_child} -P ${pidfile} ${prowlarr_exec_dir}/Prowlarr --data=${prowlarr_data_dir} --nobrowser >> /dev/null 2>&1 ${rc_flags}"
+
+}
+
+run_rc_command "$1"
+
