@@ -136,6 +136,23 @@ BACKUP_LOCATION="backup"
 USE_BASEJAIL="-b"
 DUPLICATI_PW="yourpassword"
 ```
+
+Create prowlarr-config
+
+```
+JAIL_IP="192.168.5.85"
+DEFAULT_GW_IP="192.168.5.1"
+INTERFACE="vnet0"
+VNET="on"
+JAIL_NAME="prowlarr"
+POOL_PATH="/mnt/v1"
+APPS_PATH="apps"
+PROWLARR_DATA="prowlarr"
+MEDIA_LOCATION="media"
+TORRENTS_LOCATION="torrents"
+USE_BASEJAIL="-b"
+```
+
 ## Install Transmission in fresh Jail
 
 ### Prerequisites
