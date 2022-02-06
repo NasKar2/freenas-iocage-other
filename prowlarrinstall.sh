@@ -111,14 +111,14 @@ iocage exec ${JAIL_NAME} sysrc prowlarr_enable=TRUE
 iocage exec ${JAIL_NAME} sysrc prowlarr_data_dir="/config"
 iocage exec ${JAIL_NAME} service prowlarr start
 
-iocage exec ${JAIL_NAME} chown -R prowlarr:prowlarr /usr/local/share/Prowlarr /config
-iocage exec ${JAIL_NAME} mkdir /usr/local/etc/rc.d
-iocage exec ${JAIL_NAME} cp -f /mnt/configs/prowlarr /usr/local/etc/rc.d/prowlarr
+#iocage exec ${JAIL_NAME} chown -R prowlarr:prowlarr /usr/local/share/Prowlarr /config
+#iocage exec ${JAIL_NAME} "mkdir -p /usr/local/etc/rc.d"
+#iocage exec ${JAIL_NAME} cp -f /mnt/configs/prowlarr /usr/local/etc/rc.d/prowlarr
 
 iocage exec ${JAIL_NAME} chmod u+x /usr/local/etc/rc.d/prowlarr
 iocage exec ${JAIL_NAME} sysrc "prowlarr_enable=YES"
 iocage exec ${JAIL_NAME} sysrc "prowlarr_data_dir=/config"
-iocage exec ${JAIL_NAME} chown -R prowlarr:prowlarr /usr/local/etc/rc.d/prowlarr
+#iocage exec ${JAIL_NAME} chown -R prowlarr:prowlarr /usr/local/etc/rc.d/prowlarr
 iocage exec ${JAIL_NAME} service prowlarr restart
 
 iocage restart ${JAIL_NAME}
