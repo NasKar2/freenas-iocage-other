@@ -80,20 +80,20 @@ fi
 #php 7.3
 #echo '{"pkgs":["nano","rsync","nginx","mariadb105-server","php73","php73-json","php73-mysqli","php73-session","php73-xml","php73-hash","php73-ftp","php73-curl","php73-tokenizer","php73-zlib","php73-zip","php73-filter","php73-gd","php73-openssl"]}' > /tmp/pkg.json
 
-# php 7.4
+# php 8.0
 cat <<__EOF__ >/tmp/pkg.json
-	{
+        {
   "pkgs":[
-  "php74","php74-curl","php74-dom","php74-exif","php74-fileinfo","php74-json","php74-mbstring",
-  "php74-mysqli","php74-pecl-libsodium","php74-openssl","php74-pecl-imagick","php74-xml","php74-zip",
-  "php74-filter","php74-gd","php74-iconv","php74-pecl-mcrypt","php74-simplexml","php74-xmlreader","php74-zlib",
-  "php74-ftp","php74-pecl-ssh2","php74-sockets",
-  "mariadb103-server","unix2dos","ssmtp","phpmyadmin5-php74",
-  "php74-xmlrpc","php74-ctype","php74-session","php74-xmlwriter",
-  "redis","php74-pecl-redis","nano","nginx"
+  "php80","php80-curl","php80-dom","php80-exif","php80-fileinfo","php80-mbstring",
+  "php80-mysqli","php80-pecl-libsodium","php80-pecl-imagick","php80-xml","php80-zip",
+  "php80-filter","php80-gd","php80-iconv","php80-pecl-mcrypt","php80-simplexml","php80-xmlreader","php80-zlib",
+  "php80-ftp","php80-pecl-ssh2","php80-sockets",
+  "mariadb103-server","unix2dos","ssmtp","phpmyadmin5-php80",
+  "redis","php80-pecl-redis","nano","nginx"
   ]
 }
 __EOF__
+
 
 if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
