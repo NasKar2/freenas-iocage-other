@@ -88,7 +88,7 @@ cat <<__EOF__ >/tmp/pkg.json
   "php80-mysqli","php80-pecl-libsodium","php80-pecl-imagick","php80-xml","php80-zip",
   "php80-filter","php80-gd","php80-iconv","php80-pecl-mcrypt","php80-simplexml","php80-xmlreader","php80-zlib",
   "php80-ftp","php80-pecl-ssh2","php80-sockets",
-  "mariadb103-server","unix2dos","ssmtp","phpmyadmin5-php80",
+  "mariadb106-server","unix2dos","ssmtp","phpmyadmin5-php80",
   "redis","php80-pecl-redis","nano","nginx"
   ]
 }
@@ -126,17 +126,12 @@ iocage exec ${JAIL_NAME} service mysql-server start
 iocage exec ${JAIL_NAME} sysrc nginx_enable="YES"
 iocage exec ${JAIL_NAME} service nginx start
 iocage exec ${JAIL_NAME} cp /mnt/configs/www.conf /usr/local/etc/php-fpm.d/www.conf
-iocage exec ${JAIL_NAME} ln -s /usr/local/etc/php.ini-production /usr/local/etc/php.ini
+#iocage exec ${JAIL_NAME} ln -s /usr/local/etc/php.ini-production /usr/local/etc/php.ini
 iocage exec ${JAIL_NAME} sysrc php_fpm_enable="YES"
 iocage exec ${JAIL_NAME} service php-fpm restart
 service nginx restart
 #iocage exec ${JAIL_NAME} echo "<?php phpinfo(); ?>" | tee /config/phpinfo.php
 iocage exec ${JAIL_NAME} cp /mnt/configs/php-fpm.conf /usr/local/etc/php-fpm.conf
-
-#
-# MariaDB 10.4 requirement
-#iocage exec "${JAIL_NAME}" sed -i '' "s|mysqli.default_socket =|mysqli.default_socket = /var/run/mysql/mysql.sock|" /usr/local/etc/php.ini
-
 
 #
 # start nginx and copy nginx.conf with jail IP adddress
@@ -164,24 +159,37 @@ iocage exec ${JAIL_NAME} service nginx restart
 #
 # PHP
 iocage exec ${JAIL_NAME} cp /mnt/configs/www.conf /usr/local/etc/php-fpm.d/www.conf
-iocage exec ${JAIL_NAME} ln -s /usr/local/etc/php.ini-production /usr/local/etc/php.ini
+iocage exec ${JAIL_NAME} cp /usr/local/etc/php.ini-production /usr/local/etc/php.ini
 #iocage exec ${JAIL_NAME} sysrc php_fpm_enable="YES"
 iocage exec ${JAIL_NAME} service php-fpm restart
 iocage exec ${JAIL_NAME} service nginx restart
 #iocage exec ${JAIL_NAME} echo "<?php phpinfo(); ?>" | tee /config/phpinfo.php
 #iocage exec ${JAIL_NAME} cp /mnt/configs/php-fpm.conf /usr/local/etc/php-fpm.conf
+#
+# MariaDB 10.4 requirement
+iocage exec "${JAIL_NAME}" sed -i '' "s|mysqli.default_socket =|mysqli.default_socket = /var/run/mysql/mysql.sock|" /usr/local/etc/php.ini
+iocage exec ${JAIL_NAME} service php-fpm restart
+
 
 # Secure database, set root password, create wordpress DB, user, and password
 #DB_VERSION="$(iocage exec ${JAIL_NAME} "mysql -V | cut -d ' ' -f 6  | cut -d . -f -2")"
 #DB_VERSION="${DB_VERSION//.}"
-echo "Secure database"
+# Create database
+echo "Creating database"
 iocage exec ${JAIL_NAME} mysql -u root -e "CREATE DATABASE wordpress;"
 iocage exec ${JAIL_NAME} mysql -u root -e "GRANT ALL ON wordpress.* TO wordpress@localhost IDENTIFIED BY '${DB_PASSWORD}';"
+# Secure database
+echo "Secure database"
+# Remove anonymous users
 iocage exec ${JAIL_NAME} mysql -u root -e "DELETE FROM mysql.user WHERE User='';"
+# Disallow remote root login
 iocage exec ${JAIL_NAME} mysql -u root -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+# Remove test database and access to it
 iocage exec ${JAIL_NAME} mysql -u root -e "DROP DATABASE IF EXISTS test;"
 iocage exec ${JAIL_NAME} mysql -u root -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
-iocage exec ${JAIL_NAME} mysql -u root -e "UPDATE mysql.user SET Password=PASSWORD('${DB_PASSWORD}') WHERE User='root';"
+# Reload privilege tables
+iocage exec "${JAIL_NAME}" mysql -e "FLUSH PRIVILEGES;"
+
 iocage exec "${JAIL_NAME}" mysqladmin --user=root password "${DB_ROOT_PASSWORD}" reload
 #iocage exec ${JAIL_NAME} mysqladmin reload
 iocage exec ${JAIL_NAME} cp -f /mnt/configs/my.cnf /root/.my.cnf
