@@ -63,7 +63,7 @@ MEDIA_LOCATION="media"
 TORRENTS_LOCATION="torrents"
 ```
 
-Create wp-config for Wordpress add the field to choose the DB_PASSWORD or have it randomly generated if blank.
+Create wp-config for Wordpress add the field to choose the DB_PASSWORD or DB_ROOT_PASSWORD or have it randomly generated if blank.
 
 ```
 JAIL_IP="192.168.5.237"
@@ -75,6 +75,7 @@ APPS_PATH="apps"
 JAIL_NAME="wordpress"
 WP_DATA="wordpress"
 DB_PASSWORD="yourdatabasepassword"
+
 ```
 
 Create WordpressBackup-config. Can backup wordpress files and wordpress database to /mnt/v1/backup/wpbackup.tar.gz.  Restore will replace all the wordpress files and restore the database.  If cron="yes" then it will default to backup to allow it to be called by a cronjob.
@@ -92,6 +93,7 @@ BACKUP_NAME="wpbackup.tar.gz"
 DATABASE_NAME="wordpress"
 DB_BACKUP_NAME="wordpress.sql"
 DB_PASSWORD="yourdatabasepassword"
+DB_ROOT_PASSWORD="yourdatabasepassword"
 ```
 
 Create urbackup-config.

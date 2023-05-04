@@ -23,12 +23,14 @@ SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/wp-config
 CONFIGS_PATH=$SCRIPTPATH/configs
-DB_ROOT_PASSWORD=$(openssl rand -base64 16)
+#DB_ROOT_PASSWORD=$(openssl rand -base64 16)
 if [ -z $DB_PASSWORD  ]; then
    DB_PASSWORD=$(openssl rand -hex 10)
 fi
 echo "the DB_PASSWORD ${DB_PASSWORD}"
-DB_ROOT_PASSWORD=$(openssl rand -base64 12)
+if [ -z $DB_ROOT_PASSWORD  ]; then
+   DB_ROOT_PASSWORD=$(openssl rand -base64 12)
+fi
 echo "DB_ROOT_PASSWORD is ${DB_ROOT_PASSWORD}"
 RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
