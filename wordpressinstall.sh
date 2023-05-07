@@ -200,6 +200,8 @@ iocage exec ${JAIL_NAME} sed -i '' "s|mypassword|${DB_PASSWORD}|" /root/.my.cnf
 # Save Passwords for later use
 echo 'DB_PASSWORD="'${DB_PASSWORD}'" # user=wordpress' > /root/${JAIL_NAME}_db_password.txt
 echo 'DB_ROOT_PASSWORD="'${DB_ROOT_PASSWORD}'"' >> /root/${JAIL_NAME}_db_password.txt
+cp /root/${JAIL_NAME}_db_password.txt /${wp_config}
+
 
 iocage exec ${JAIL_NAME} service php-fpm restart
 
