@@ -86,12 +86,12 @@ fi
 cat <<__EOF__ >/tmp/pkg.json
         {
   "pkgs":[
-  "php80","php80-curl","php80-dom","php80-exif","php80-fileinfo","php80-mbstring",
-  "php80-mysqli","php80-pecl-libsodium","php80-pecl-imagick","php80-xml","php80-zip",
-  "php80-filter","php80-gd","php80-iconv","php80-pecl-mcrypt","php80-simplexml","php80-xmlreader","php80-zlib",
-  "php80-ftp","php80-pecl-ssh2","php80-sockets",
-  "mariadb106-server","unix2dos","ssmtp","phpmyadmin5-php80",
-  "redis","php80-pecl-redis","nano","nginx"
+  "php82","php82-curl","php82-dom","php82-exif","php82-fileinfo","php82-mbstring",
+  "php82-mysqli","php82-pecl-libsodium","php82-pecl-imagick","php82-xml","php82-zip",
+  "php82-filter","php82-gd","php82-iconv","php82-pecl-mcrypt","php82-simplexml","php82-xmlreader","php82-zlib",
+  "php82-ftp","php82-pecl-ssh2","php82-sockets",
+  "mariadb106-server","unix2dos","ssmtp","phpmyadmin5-php82",
+  "redis","php82-pecl-redis","nano","nginx"
   ]
 }
 __EOF__
