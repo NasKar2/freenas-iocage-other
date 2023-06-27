@@ -74,7 +74,8 @@ fi
 # Create Jail
 #echo '{"pkgs":["nano","nginx","php73-xml","php73-hash","php73-gd","php73-curl","php73-tokenizer","php73-zlib","php73-zip","mysql56-server","php73","php73-mysql"]}' > /tmp/pkg.json
 #echo '{"pkgs":["nano","bash","llvm40","openjdk8","unifi5"]}' > /tmp/pkg.json
-echo '{"pkgs":["nano","bash","openjdk8","unifi6"]}' > /tmp/pkg.json
+#echo '{"pkgs":["nano","bash","openjdk8","unifi6"]}' > /tmp/pkg.json
+echo '{"pkgs":["nano","unifi7"]}' > /tmp/pkg.json
 echo $RELEASE
 if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
@@ -104,7 +105,7 @@ mkdir -p ${POOL_PATH}/${APPS_PATH}/${UNIFI_DATA}
 echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${UNIFI_DATA}'"
 
 unifi_config=${POOL_PATH}/${APPS_PATH}/${UNIFI_DATA}
-iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
+#iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
 # create dir in jail for mount points
 iocage exec ${JAIL_NAME} mkdir -p /usr/ports
